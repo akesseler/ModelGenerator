@@ -68,6 +68,8 @@ namespace Plexdata.ModelGenerator.Models
         {
             StringBuilder builder = new StringBuilder(base.ToString());
 
+            if (builder.Length > 0) { builder.Append(", "); }
+
             builder.AppendFormat("{0}: {1}, ", nameof(this.AttributeName), this.AttributeName);
 
             return builder.ToString().TrimEnd(' ', ',');

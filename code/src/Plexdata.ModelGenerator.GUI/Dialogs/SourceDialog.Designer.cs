@@ -53,12 +53,13 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SourceDialog));
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.chkEditing = new System.Windows.Forms.CheckBox();
             this.ttsMain = new System.Windows.Forms.ToolTip(this.components);
-            this.txtSource = new Plexdata.ModelGenerator.Gui.Controls.TextBoxEx();
             this.lblGeneral = new System.Windows.Forms.Label();
+            this.txtSource = new Plexdata.ModelGenerator.Gui.Controls.TextBoxEx();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -96,6 +97,18 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
             this.chkEditing.UseVisualStyleBackColor = true;
             this.chkEditing.CheckedChanged += new System.EventHandler(this.OnEditingCheckedChanged);
             // 
+            // lblGeneral
+            // 
+            this.lblGeneral.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblGeneral.Location = new System.Drawing.Point(12, 13);
+            this.lblGeneral.Name = "lblGeneral";
+            this.lblGeneral.Size = new System.Drawing.Size(560, 59);
+            this.lblGeneral.TabIndex = 4;
+            this.lblGeneral.Text = "Provide the source to be used to generate classes from, or paste a complete docum" +
+    "ent (JSON or XML) from the Clipboard. You may need to enable edit mode when chan" +
+    "ging the source manually.";
+            // 
             // txtSource
             // 
             this.txtSource.AcceptsReturn = true;
@@ -113,18 +126,6 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
             this.txtSource.TabIndex = 0;
             this.txtSource.WordWrap = false;
             // 
-            // lblGeneral
-            // 
-            this.lblGeneral.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblGeneral.Location = new System.Drawing.Point(12, 13);
-            this.lblGeneral.Name = "lblGeneral";
-            this.lblGeneral.Size = new System.Drawing.Size(560, 59);
-            this.lblGeneral.TabIndex = 4;
-            this.lblGeneral.Text = "Provide the source to be used to generate classes from, or paste a complete docum" +
-    "ent (JSON or XML) from the Clipboard. You may need to enable edit mode when chan" +
-    "ging the source manually.";
-            // 
             // SourceDialog
             // 
             this.AcceptButton = this.btnApply;
@@ -138,6 +139,7 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnCancel);
             this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 300);

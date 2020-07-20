@@ -52,6 +52,7 @@ namespace Plexdata.ModelGenerator.GUI.Dialogs
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SaveDialog));
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.grpSettings = new System.Windows.Forms.GroupBox();
@@ -153,6 +154,7 @@ namespace Plexdata.ModelGenerator.GUI.Dialogs
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnCancel);
             this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 163);

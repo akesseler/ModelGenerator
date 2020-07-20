@@ -28,7 +28,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Plexdata.ModelGenerator.Gui")]
+[assembly: AssemblyTitle("Plexdata Model Generator")]
 [assembly: AssemblyDescription("Plexdata Model Generator GUI represents the Graphical User Interface of the Plexdata Model Generator.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Plexdata")]

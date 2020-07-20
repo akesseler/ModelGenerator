@@ -54,6 +54,8 @@ namespace Plexdata.ModelGenerator.Gui
             : base()
         {
             this.InitializeComponent();
+
+            this.Text = InfoDialog.Title;
         }
 
         #endregion
@@ -164,16 +166,16 @@ namespace Plexdata.ModelGenerator.Gui
                     source = System.IO.File.ReadAllText(this.txtFilename.Text);
                 }
 
-                GeneratorSettings settings = new GeneratorSettings();
-
-                settings.RootClass = this.txtRootClass.Text;
-                settings.Namespace = this.txtNamespace.Text;
-                settings.IsAllInOne = this.chkAllInOne.Checked;
-
-                settings.SourceType = (SourceType)this.cmbSourceType.SelectedItem;
-                settings.TargetType = (TargetType)this.cmbTargetType.SelectedItem;
-                settings.MemberType = (MemberType)this.cmbMemberType.SelectedItem;
-                settings.AttributeType = (AttributeType)this.cmbAttributeType.SelectedItem;
+                GeneratorSettings settings = new GeneratorSettings
+                {
+                    RootClass = this.txtRootClass.Text,
+                    Namespace = this.txtNamespace.Text,
+                    IsAllInOne = this.chkAllInOne.Checked,
+                    SourceType = (SourceType)this.cmbSourceType.SelectedItem,
+                    TargetType = (TargetType)this.cmbTargetType.SelectedItem,
+                    MemberType = (MemberType)this.cmbMemberType.SelectedItem,
+                    AttributeType = (AttributeType)this.cmbAttributeType.SelectedItem
+                };
 
                 IEnumerable<ICode> codes = Generators.ModelGenerator.Generate(settings, source);
 
@@ -226,6 +228,13 @@ namespace Plexdata.ModelGenerator.Gui
             }
         }
 
+        private void OnButtonInfoClick(Object sender, EventArgs args)
+        {
+            InfoDialog dialog = new InfoDialog();
+
+            dialog.ShowDialog(this);
+        }
+
         private void OnButtonLoadFileClick(Object sender, EventArgs args)
         {
             OpenFileDialog dialog = new OpenFileDialog
@@ -237,7 +246,7 @@ namespace Plexdata.ModelGenerator.Gui
                 FilterIndex = (Int32)this.cmbSourceType.SelectedItem + 1
             };
 
-            if (dialog.ShowDialog() != DialogResult.OK)
+            if (dialog.ShowDialog(this) != DialogResult.OK)
             {
                 return;
             }
