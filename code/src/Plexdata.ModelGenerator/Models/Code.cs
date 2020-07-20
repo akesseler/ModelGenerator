@@ -278,6 +278,11 @@ namespace Plexdata.ModelGenerator.Models
 
                 if (property.Origin == "#text")
                 {
+                    if (parent.Name == suffix)
+                    {
+                        return $"{suffix}{property.Name}";
+                    }
+
                     return $"{suffix}";
                 }
                 else
@@ -356,11 +361,10 @@ namespace Plexdata.ModelGenerator.Models
                         attribute = String.Format("XmlRoot({0}, {1})",
                             String.Format(this.XmlElementNameFormat, source.ClassName),
                             String.Format(this.XmlNamespaceFormat, source.Entity.XmlNamespace));
-
                     }
                     else
                     {
-                        attribute = String.Format("XmlRoot({0})", (source.ClassName));
+                        attribute = String.Format("XmlRoot(\"{0}\")", source.ClassName);
                     }
 
                     return true;

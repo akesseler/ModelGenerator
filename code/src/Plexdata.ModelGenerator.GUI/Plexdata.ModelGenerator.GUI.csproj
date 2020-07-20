@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\MainIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -54,6 +57,12 @@
     </Compile>
     <Compile Include="Controls\TextBoxEx.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dialogs\InfoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\InfoDialog.Designer.cs">
+      <DependentUpon>InfoDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\SaveDialog.cs">
       <SubType>Form</SubType>
@@ -86,6 +95,9 @@
     <Compile Include="Settings\ProgramSettings.cs" />
     <Compile Include="Settings\SettingsSerializer.cs" />
     <Compile Include="Settings\WindowSettings.cs" />
+    <EmbeddedResource Include="Dialogs\InfoDialog.resx">
+      <DependentUpon>InfoDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SaveDialog.resx">
       <DependentUpon>SaveDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -129,11 +141,11 @@
     <Content Include="Resources\ButtonCodeSmall.png" />
     <Content Include="Resources\ButtonDotsSmall.png" />
     <Content Include="Resources\ExitLarge.png" />
-    <Content Include="Resources\ExitSmall.png" />
+    <None Include="Resources\InfoLarge.png" />
+    <Content Include="Resources\MainIcon.ico" />
+    <Content Include="Resources\MainLogo.png" />
     <Content Include="Resources\PlayLarge.png" />
-    <Content Include="Resources\PlaySmall.png" />
     <Content Include="Resources\SaveLarge.png" />
-    <Content Include="Resources\SaveSmall.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

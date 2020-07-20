@@ -53,6 +53,7 @@ namespace Plexdata.ModelGenerator.Gui
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.tbcCode = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -60,6 +61,7 @@ namespace Plexdata.ModelGenerator.Gui
             this.tbbExit = new System.Windows.Forms.ToolStripButton();
             this.tbbPlay = new System.Windows.Forms.ToolStripButton();
             this.tbbSave = new System.Windows.Forms.ToolStripButton();
+            this.tbbInfo = new System.Windows.Forms.ToolStripButton();
             this.txtFilename = new System.Windows.Forms.TextBox();
             this.txtRootClass = new System.Windows.Forms.TextBox();
             this.txtNamespace = new System.Windows.Forms.TextBox();
@@ -125,7 +127,8 @@ namespace Plexdata.ModelGenerator.Gui
             this.tbsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tbbExit,
             this.tbbPlay,
-            this.tbbSave});
+            this.tbbSave,
+            this.tbbInfo});
             this.tbsMain.Location = new System.Drawing.Point(0, 0);
             this.tbsMain.Name = "tbsMain";
             this.tbsMain.Size = new System.Drawing.Size(644, 39);
@@ -169,6 +172,19 @@ namespace Plexdata.ModelGenerator.Gui
             this.tbbSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tbbSave.ToolTipText = "Save all generated files.";
             this.tbbSave.Click += new System.EventHandler(this.OnButtonSaveClick);
+            // 
+            // tbbInfo
+            // 
+            this.tbbInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbbInfo.Image = global::Plexdata.ModelGenerator.Gui.Properties.Resources.InfoLarge;
+            this.tbbInfo.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tbbInfo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbbInfo.Name = "tbbInfo";
+            this.tbbInfo.Size = new System.Drawing.Size(36, 36);
+            this.tbbInfo.Text = "Info";
+            this.tbbInfo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbbInfo.ToolTipText = "Show program info dialog.";
+            this.tbbInfo.Click += new System.EventHandler(this.OnButtonInfoClick);
             // 
             // txtFilename
             // 
@@ -425,6 +441,7 @@ namespace Plexdata.ModelGenerator.Gui
             this.Controls.Add(this.grpSettings);
             this.Controls.Add(this.tbsMain);
             this.Controls.Add(this.tbcCode);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(660, 500);
             this.Name = "MainWindow";
             this.Text = "Model Generator";
@@ -468,6 +485,7 @@ namespace Plexdata.ModelGenerator.Gui
         private System.Windows.Forms.Label lblMemberType;
         private System.Windows.Forms.Label lblAttributeType;
         private System.Windows.Forms.ToolTip tipMain;
+        private System.Windows.Forms.ToolStripButton tbbInfo;
     }
 }
 

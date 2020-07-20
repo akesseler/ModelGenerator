@@ -101,6 +101,8 @@ namespace Plexdata.ModelGenerator.Models
         {
             StringBuilder builder = new StringBuilder(base.ToString());
 
+            if (builder.Length > 0) { builder.Append(", "); }
+
             builder.AppendFormat("{0}: {1}, ", nameof(this.ClassName), this.ClassName);
 
             builder.AppendFormat("{0}: {1}, ", nameof(this.Properties), this.properties?.Count ?? 0);
