@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2023 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 
 namespace Plexdata.ModelGenerator.Models
 {
@@ -407,6 +408,23 @@ namespace Plexdata.ModelGenerator.Models
                 if (source.Origin.StartsWith("@", StringComparison.InvariantCultureIgnoreCase))
                 {
                     attribute = $"XmlAttribute(\"{source.Origin.TrimStart('@')}\")";
+                    return true;
+                }
+
+                if (source.Entity.Type == typeof(XmlCDataSection))
+                {
+                    // Keep in mind, CDATA can only be part of an XML element. Using CDATA inside an XML attribute
+                    // or inside an XML text will/may cause an exception when using Microsoft's XmlSerializer.
+
+                    if (settings.TargetType == TargetType.VisualBasic)
+                    {
+                        attribute = $"XmlElement(\"{source.AttributeName}\", GetType({nameof(XmlCDataSection)}))";
+                    }
+                    else
+                    {
+                        attribute = $"XmlElement(\"{source.AttributeName}\", typeof({nameof(XmlCDataSection)}))";
+                    }
+
                     return true;
                 }
 
