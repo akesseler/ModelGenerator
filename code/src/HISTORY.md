@@ -1,7 +1,8 @@
 
 
 **1.0.1**
-- Support of XML CData sections.
+- Support of XML CData sections by class `XmlCDataSection`.
+- Update of `Newtonsoft.Json` package to version 13.0.3.
 - Version number increased.
 - Copyright year updated.
 
