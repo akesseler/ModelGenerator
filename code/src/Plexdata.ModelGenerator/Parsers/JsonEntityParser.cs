@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2020 plexdata.de
+ * Copyright (c) 2023 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,8 @@ using Plexdata.ModelGenerator.Extensions;
 using Plexdata.ModelGenerator.Interfaces;
 using Plexdata.ModelGenerator.Models;
 using System;
+using System.Linq;
+using System.Xml;
 
 namespace Plexdata.ModelGenerator.Parsers
 {
@@ -67,7 +69,7 @@ namespace Plexdata.ModelGenerator.Parsers
                 throw new InvalidOperationException("Unable to deserialize source string.");
             }
 
-            Entity result = null;
+            Entity result;
 
             if (input.Type == JTokenType.Object)
             {
@@ -160,6 +162,16 @@ namespace Plexdata.ModelGenerator.Parsers
 
             Entity entity = new Entity(name);
 
+            // Can't be put into derived class.
+            if (this.IsXmlCDataSection(source))
+            {
+                entity.Comment =
+                    "TODO: See also https://learn.microsoft.com/en-us/dotnet/api/system.xml.xmlcdatasection " +
+                    "and see https://learn.microsoft.com/de-de/dotnet/api/system.xml.xmldocument.createcdatasection";
+                entity.Type = typeof(XmlCDataSection);
+                return entity;
+            }
+
             foreach (JToken token in source.Children())
             {
                 entity.AddEntity(this.Parse(token));
@@ -213,6 +225,18 @@ namespace Plexdata.ModelGenerator.Parsers
                 default:
                     return new Entity(name, source.GetValueType());
             }
+        }
+
+        private Boolean IsXmlCDataSection(JObject source)
+        {
+            JEnumerable<JToken> tokens = source.Children();
+
+            if (tokens.Count() == 1 && tokens.First() is JProperty property)
+            {
+                return property.Name.Equals("#cdata-section", StringComparison.InvariantCultureIgnoreCase);
+            }
+
+            return false;
         }
 
         #endregion
