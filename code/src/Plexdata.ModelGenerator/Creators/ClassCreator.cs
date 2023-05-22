@@ -98,7 +98,7 @@ namespace Plexdata.ModelGenerator.Creators
 
         private Boolean IsEqual(Entity entity1, Entity entity2)
         {
-            if (entity1.IsClass && entity2.IsClass && entity1.Name == entity2.Name)
+            if (entity1.IsClass && entity2.IsClass && entity1.ObjectName == entity2.ObjectName)
             {
                 foreach (Entity current in entity1.Children)
                 {
@@ -130,7 +130,7 @@ namespace Plexdata.ModelGenerator.Creators
                     }
                     else
                     {
-                        existing.AddEntity(outer);
+                        existing.AddChildEntity(outer);
                     }
                 }
             }
@@ -140,7 +140,7 @@ namespace Plexdata.ModelGenerator.Creators
         {
             foreach (Entity entity in result)
             {
-                if (entity.IsClass && source.IsClass && entity.Name == source.Name)
+                if (entity.IsClass && source.IsClass && entity.ObjectName == source.ObjectName)
                 {
                     return entity;
                 }
@@ -158,7 +158,7 @@ namespace Plexdata.ModelGenerator.Creators
         {
             foreach (Entity entity in entities)
             {
-                if (entity.Name == source.Name)
+                if (entity.ObjectName == source.ObjectName)
                 {
                     return entity;
                 }
@@ -169,25 +169,25 @@ namespace Plexdata.ModelGenerator.Creators
 
         private void ChangeType(Entity source, Entity other)
         {
-            if (source.Type == other.Type)
+            if (source.MemberType == other.MemberType)
             {
                 return;
             }
 
-            if (other.Type == typeof(Int32))
+            if (other.MemberType == typeof(Int32))
             {
-                if (source.Type == typeof(Int64))
+                if (source.MemberType == typeof(Int64))
                 {
-                    other.Type = source.Type;
+                    other.ReviseMemberType(source.MemberType);
                     return;
                 }
             }
 
-            if (other.Type == typeof(UInt32))
+            if (other.MemberType == typeof(UInt32))
             {
-                if (source.Type == typeof(UInt64))
+                if (source.MemberType == typeof(UInt64))
                 {
-                    other.Type = source.Type;
+                    other.ReviseMemberType(source.MemberType);
                     return;
                 }
             }

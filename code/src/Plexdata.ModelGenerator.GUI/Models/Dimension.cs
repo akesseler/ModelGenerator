@@ -29,13 +29,12 @@ using System.Xml.Serialization;
 namespace Plexdata.ModelGenerator.Gui.Models
 {
     [XmlType("dimension")]
-    [DebuggerDisplay("Width = {this.Width}, Height = {this.Height}")]
+    [DebuggerDisplay("{GetDebuggerDisplay(),nq}")]
     public class Dimension
     {
         #region Private Fields 
 
         private Int32 width = 0;
-
         private Int32 height = 0;
 
         #endregion
@@ -98,6 +97,15 @@ namespace Plexdata.ModelGenerator.Gui.Models
                     this.height = value;
                 }
             }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private String GetDebuggerDisplay()
+        {
+            return $"{nameof(this.Width)}: '{this.Width}'; {nameof(this.Height)}: '{this.Height}'";
         }
 
         #endregion

@@ -19,7 +19,7 @@ namespace Plexdata.ModelGenerator.Gui.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -63,9 +63,9 @@ namespace Plexdata.ModelGenerator.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ButtonCodeSmall {
+        internal static System.Drawing.Bitmap ButtonDotsSmall {
             get {
-                object obj = ResourceManager.GetObject("ButtonCodeSmall", resourceCulture);
+                object obj = ResourceManager.GetObject("ButtonDotsSmall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace Plexdata.ModelGenerator.Gui.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ButtonDotsSmall {
+        internal static System.Drawing.Bitmap CodeLarge {
             get {
-                object obj = ResourceManager.GetObject("ButtonDotsSmall", resourceCulture);
+                object obj = ResourceManager.GetObject("CodeLarge", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -87,6 +87,76 @@ namespace Plexdata.ModelGenerator.Gui.Properties {
             get {
                 object obj = ResourceManager.GetObject("ExitLarge", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HelpLarge {
+            get {
+                object obj = ResourceManager.GetObject("HelpLarge", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta charset=&quot;utf-8&quot; /&gt;
+        ///    &lt;title&gt;Help: Settings&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///        body {
+        ///            margin: 2em;
+        ///            font-family: &quot;Times New Roman&quot;, Times, serif;
+        ///            font-size: 1.3em;
+        ///        }
+        ///
+        ///        h1 {
+        ///            font-size: 1.4em;
+        ///            font-weight: bold;
+        ///        }
+        ///
+        ///        h2 {
+        ///            font-size: 1.2em;
+        ///            font-weight: normal;
+        ///            font-variant: small-caps;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string HtmlGeneralHelp {
+            get {
+                return ResourceManager.GetString("HtmlGeneralHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta charset=&quot;utf-8&quot; /&gt;
+        ///    &lt;title&gt;Help: Settings&lt;/title&gt;
+        ///    &lt;style&gt;
+        ///        body {
+        ///            margin: 2em;
+        ///            font-family: &quot;Times New Roman&quot;, Times, serif;
+        ///            font-size: 1.3em;
+        ///        }
+        ///
+        ///        h1 {
+        ///            font-size: 1.4em;
+        ///            font-weight: bold;
+        ///        }
+        ///
+        ///        h2 {
+        ///            font-size: 1.2em;
+        ///            font-weight: normal;
+        ///            font-variant: small-caps;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string HtmlSettingsHelp {
+            get {
+                return ResourceManager.GetString("HtmlSettingsHelp", resourceCulture);
             }
         }
         
@@ -136,6 +206,16 @@ namespace Plexdata.ModelGenerator.Gui.Properties {
         internal static System.Drawing.Bitmap SaveLarge {
             get {
                 object obj = ResourceManager.GetObject("SaveLarge", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SettingsLarge {
+            get {
+                object obj = ResourceManager.GetObject("SettingsLarge", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

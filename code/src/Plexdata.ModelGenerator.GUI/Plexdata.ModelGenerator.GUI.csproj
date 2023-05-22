@@ -70,6 +70,12 @@
     <Compile Include="Dialogs\SaveDialog.Designer.cs">
       <DependentUpon>SaveDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\SettingsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\SettingsDialog.Designer.cs">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Events\ClipboardEventArgs.cs" />
     <Compile Include="Dialogs\SourceDialog.cs">
       <SubType>Form</SubType>
@@ -78,6 +84,7 @@
       <DependentUpon>SourceDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\DimensionExtension.cs" />
+    <Compile Include="Extensions\FormExtension.cs" />
     <Compile Include="Extensions\LocationExtension.cs" />
     <Compile Include="Extensions\SettingsExtension.cs" />
     <Compile Include="MainWindow.cs">
@@ -86,10 +93,13 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Adjustment.cs" />
     <Compile Include="Models\Dimension.cs" />
     <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\Replacement.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\CreateSettings.cs" />
     <Compile Include="Settings\SourceSettings.cs" />
     <Compile Include="Settings\TargetSettings.cs" />
     <Compile Include="Settings\ProgramSettings.cs" />
@@ -100,6 +110,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SaveDialog.resx">
       <DependentUpon>SaveDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\SettingsDialog.resx">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SourceDialog.resx">
       <DependentUpon>SourceDialog.cs</DependentUpon>
@@ -138,9 +151,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\ButtonCodeSmall.png" />
     <Content Include="Resources\ButtonDotsSmall.png" />
+    <Content Include="Resources\CodeLarge.png" />
     <Content Include="Resources\ExitLarge.png" />
+    <None Include="Resources\HtmlSettingsHelp.html" />
+    <None Include="Resources\HelpLarge.png" />
+    <Content Include="Resources\HtmlGeneralHelp.html" />
+    <Content Include="Resources\SettingsLarge.png" />
     <None Include="Resources\InfoLarge.png" />
     <Content Include="Resources\MainIcon.ico" />
     <Content Include="Resources\MainLogo.png" />

@@ -48,6 +48,7 @@
     <Compile Include="Creators\ClassCreator.cs" />
     <Compile Include="Creators\CodeCreator.cs" />
     <Compile Include="Defines\AttributeType.cs" />
+    <Compile Include="Defines\CasingType.cs" />
     <Compile Include="Defines\MemberType.cs" />
     <Compile Include="Defines\SourceType.cs" />
     <Compile Include="Defines\TargetType.cs" />
@@ -57,12 +58,13 @@
     <Compile Include="Generators\ModelGenerator.cs" />
     <Compile Include="Interfaces\ICode.cs" />
     <Compile Include="Interfaces\IEntityParser.cs" />
+    <Compile Include="Models\AdjustmentSettings.cs" />
     <Compile Include="Models\Class.cs" />
     <Compile Include="Models\Code.cs" />
     <Compile Include="Models\CodeCs.cs" />
     <Compile Include="Models\CodeVb.cs" />
     <Compile Include="Models\Entity.cs" />
-    <Compile Include="Models\Property.cs" />
+    <Compile Include="Models\Member.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\GeneratorSettings.cs" />
     <Compile Include="Parsers\JsonEntityParser.cs" />

@@ -44,6 +44,7 @@ namespace Plexdata.ModelGenerator.Models
             this.TargetType = TargetType.CSharp;
             this.MemberType = MemberType.Property;
             this.AttributeType = AttributeType.Newtonsoft;
+            this.Adjustment = new AdjustmentSettings();
         }
 
         #endregion
@@ -77,6 +78,8 @@ namespace Plexdata.ModelGenerator.Models
         public MemberType MemberType { get; set; }
 
         public AttributeType AttributeType { get; set; }
+
+        public AdjustmentSettings Adjustment { get; private set; }
 
         public String ProductName
         {
@@ -148,25 +151,26 @@ namespace Plexdata.ModelGenerator.Models
         {
             get
             {
-                List<String> result = new List<String>();
-
                 if (this.SourceType == SourceType.Json)
                 {
                     if (this.AttributeType == AttributeType.Newtonsoft)
                     {
-                        result.Add("Newtonsoft.Json");
+                        yield return "Newtonsoft.Json";
                     }
                     else if (this.AttributeType == AttributeType.Microsoft)
                     {
-                        result.Add("System.Text.Json.Serialization");
+                        yield return "System.Text.Json.Serialization";
+                    }
+                    else
+                    {
+                        yield return "Newtonsoft.Json";
+                        yield return "System.Text.Json.Serialization";
                     }
                 }
                 else if (this.SourceType == SourceType.Xml)
                 {
-                    result.Add("System.Xml.Serialization");
+                    yield return "System.Xml.Serialization";
                 }
-
-                return result;
             }
         }
 

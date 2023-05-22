@@ -60,7 +60,10 @@ namespace Plexdata.ModelGenerator.Gui
             this.tbsMain = new System.Windows.Forms.ToolStrip();
             this.tbbExit = new System.Windows.Forms.ToolStripButton();
             this.tbbPlay = new System.Windows.Forms.ToolStripButton();
+            this.tbbCode = new System.Windows.Forms.ToolStripButton();
             this.tbbSave = new System.Windows.Forms.ToolStripButton();
+            this.tbbSettings = new System.Windows.Forms.ToolStripButton();
+            this.tbbHelp = new System.Windows.Forms.ToolStripButton();
             this.tbbInfo = new System.Windows.Forms.ToolStripButton();
             this.txtFilename = new System.Windows.Forms.TextBox();
             this.txtRootClass = new System.Windows.Forms.TextBox();
@@ -72,7 +75,6 @@ namespace Plexdata.ModelGenerator.Gui
             this.chkAllInOne = new System.Windows.Forms.CheckBox();
             this.grpSettings = new System.Windows.Forms.GroupBox();
             this.tlpSettings = new System.Windows.Forms.TableLayoutPanel();
-            this.btnCodeText = new System.Windows.Forms.Button();
             this.btnLoadFile = new System.Windows.Forms.Button();
             this.lblFilename = new System.Windows.Forms.Label();
             this.lblRootClass = new System.Windows.Forms.Label();
@@ -127,7 +129,10 @@ namespace Plexdata.ModelGenerator.Gui
             this.tbsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tbbExit,
             this.tbbPlay,
+            this.tbbCode,
             this.tbbSave,
+            this.tbbSettings,
+            this.tbbHelp,
             this.tbbInfo});
             this.tbsMain.Location = new System.Drawing.Point(0, 0);
             this.tbsMain.Name = "tbsMain";
@@ -160,6 +165,19 @@ namespace Plexdata.ModelGenerator.Gui
             this.tbbPlay.ToolTipText = "Run generator with current settings.";
             this.tbbPlay.Click += new System.EventHandler(this.OnButtonPlayClick);
             // 
+            // tbbCode
+            // 
+            this.tbbCode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbbCode.Image = global::Plexdata.ModelGenerator.Gui.Properties.Resources.CodeLarge;
+            this.tbbCode.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tbbCode.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbbCode.Name = "tbbCode";
+            this.tbbCode.Size = new System.Drawing.Size(36, 36);
+            this.tbbCode.Text = "Code";
+            this.tbbCode.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbbCode.ToolTipText = "Paste a source model directly from Clipboard.";
+            this.tbbCode.Click += new System.EventHandler(this.OnButtonCodeClick);
+            // 
             // tbbSave
             // 
             this.tbbSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -172,6 +190,32 @@ namespace Plexdata.ModelGenerator.Gui
             this.tbbSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tbbSave.ToolTipText = "Save all generated files.";
             this.tbbSave.Click += new System.EventHandler(this.OnButtonSaveClick);
+            // 
+            // tbbSettings
+            // 
+            this.tbbSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbbSettings.Image = global::Plexdata.ModelGenerator.Gui.Properties.Resources.SettingsLarge;
+            this.tbbSettings.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tbbSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbbSettings.Name = "tbbSettings";
+            this.tbbSettings.Size = new System.Drawing.Size(36, 36);
+            this.tbbSettings.Text = "Settings";
+            this.tbbSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbbSettings.ToolTipText = "Show program settings dialog.";
+            this.tbbSettings.Click += new System.EventHandler(this.OnButtonSettingsClick);
+            // 
+            // tbbHelp
+            // 
+            this.tbbHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbbHelp.Image = global::Plexdata.ModelGenerator.Gui.Properties.Resources.HelpLarge;
+            this.tbbHelp.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tbbHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbbHelp.Name = "tbbHelp";
+            this.tbbHelp.Size = new System.Drawing.Size(36, 36);
+            this.tbbHelp.Text = "Help";
+            this.tbbHelp.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbbHelp.ToolTipText = "Show program help in external Browser.";
+            this.tbbHelp.Click += new System.EventHandler(this.OnButtonHelpClick);
             // 
             // tbbInfo
             // 
@@ -191,28 +235,28 @@ namespace Plexdata.ModelGenerator.Gui
             this.txtFilename.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtFilename.Location = new System.Drawing.Point(103, 3);
             this.txtFilename.Name = "txtFilename";
-            this.txtFilename.Size = new System.Drawing.Size(168, 20);
+            this.txtFilename.Size = new System.Drawing.Size(180, 20);
             this.txtFilename.TabIndex = 1;
             this.tipMain.SetToolTip(this.txtFilename, "Provide a source file name.");
             this.txtFilename.TextChanged += new System.EventHandler(this.OnFilenameTextChanged);
             // 
             // txtRootClass
             // 
-            this.tlpSettings.SetColumnSpan(this.txtRootClass, 3);
+            this.tlpSettings.SetColumnSpan(this.txtRootClass, 2);
             this.txtRootClass.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtRootClass.Location = new System.Drawing.Point(103, 28);
             this.txtRootClass.Name = "txtRootClass";
-            this.txtRootClass.Size = new System.Drawing.Size(218, 20);
+            this.txtRootClass.Size = new System.Drawing.Size(205, 20);
             this.txtRootClass.TabIndex = 5;
             this.tipMain.SetToolTip(this.txtRootClass, "Choose a root class name.");
             // 
             // txtNamespace
             // 
-            this.tlpSettings.SetColumnSpan(this.txtNamespace, 3);
+            this.tlpSettings.SetColumnSpan(this.txtNamespace, 2);
             this.txtNamespace.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtNamespace.Location = new System.Drawing.Point(103, 53);
             this.txtNamespace.Name = "txtNamespace";
-            this.txtNamespace.Size = new System.Drawing.Size(218, 20);
+            this.txtNamespace.Size = new System.Drawing.Size(205, 20);
             this.txtNamespace.TabIndex = 7;
             this.tipMain.SetToolTip(this.txtNamespace, "Choose a root namespace.");
             // 
@@ -221,9 +265,9 @@ namespace Plexdata.ModelGenerator.Gui
             this.cmbSourceType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmbSourceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSourceType.FormattingEnabled = true;
-            this.cmbSourceType.Location = new System.Drawing.Point(437, 3);
+            this.cmbSourceType.Location = new System.Drawing.Point(424, 3);
             this.cmbSourceType.Name = "cmbSourceType";
-            this.cmbSourceType.Size = new System.Drawing.Size(168, 21);
+            this.cmbSourceType.Size = new System.Drawing.Size(181, 21);
             this.cmbSourceType.TabIndex = 10;
             this.tipMain.SetToolTip(this.cmbSourceType, "Select source type.");
             this.cmbSourceType.SelectedIndexChanged += new System.EventHandler(this.OnSourceTypeSelectedIndexChanged);
@@ -233,9 +277,9 @@ namespace Plexdata.ModelGenerator.Gui
             this.cmbTargetType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmbTargetType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTargetType.FormattingEnabled = true;
-            this.cmbTargetType.Location = new System.Drawing.Point(437, 28);
+            this.cmbTargetType.Location = new System.Drawing.Point(424, 28);
             this.cmbTargetType.Name = "cmbTargetType";
-            this.cmbTargetType.Size = new System.Drawing.Size(168, 21);
+            this.cmbTargetType.Size = new System.Drawing.Size(181, 21);
             this.cmbTargetType.TabIndex = 12;
             this.tipMain.SetToolTip(this.cmbTargetType, "Select target type.");
             // 
@@ -244,9 +288,9 @@ namespace Plexdata.ModelGenerator.Gui
             this.cmbMemberType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmbMemberType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMemberType.FormattingEnabled = true;
-            this.cmbMemberType.Location = new System.Drawing.Point(437, 53);
+            this.cmbMemberType.Location = new System.Drawing.Point(424, 53);
             this.cmbMemberType.Name = "cmbMemberType";
-            this.cmbMemberType.Size = new System.Drawing.Size(168, 21);
+            this.cmbMemberType.Size = new System.Drawing.Size(181, 21);
             this.cmbMemberType.TabIndex = 14;
             this.tipMain.SetToolTip(this.cmbMemberType, "Select member type.");
             // 
@@ -255,21 +299,21 @@ namespace Plexdata.ModelGenerator.Gui
             this.cmbAttributeType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmbAttributeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAttributeType.FormattingEnabled = true;
-            this.cmbAttributeType.Location = new System.Drawing.Point(437, 78);
+            this.cmbAttributeType.Location = new System.Drawing.Point(424, 78);
             this.cmbAttributeType.Name = "cmbAttributeType";
-            this.cmbAttributeType.Size = new System.Drawing.Size(168, 21);
+            this.cmbAttributeType.Size = new System.Drawing.Size(181, 21);
             this.cmbAttributeType.TabIndex = 16;
             this.tipMain.SetToolTip(this.cmbAttributeType, "Select attribute type.");
             // 
             // chkAllInOne
             // 
             this.chkAllInOne.AutoSize = true;
-            this.tlpSettings.SetColumnSpan(this.chkAllInOne, 3);
+            this.tlpSettings.SetColumnSpan(this.chkAllInOne, 2);
             this.chkAllInOne.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkAllInOne.Location = new System.Drawing.Point(103, 78);
             this.chkAllInOne.MaximumSize = new System.Drawing.Size(0, 17);
             this.chkAllInOne.Name = "chkAllInOne";
-            this.chkAllInOne.Size = new System.Drawing.Size(218, 17);
+            this.chkAllInOne.Size = new System.Drawing.Size(205, 17);
             this.chkAllInOne.TabIndex = 8;
             this.chkAllInOne.Text = "Put all result classes into one output file.";
             this.chkAllInOne.UseVisualStyleBackColor = true;
@@ -291,31 +335,30 @@ namespace Plexdata.ModelGenerator.Gui
             this.tlpSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tlpSettings.ColumnCount = 7;
+            this.tlpSettings.ColumnCount = 6;
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpSettings.Controls.Add(this.btnCodeText, 3, 0);
-            this.tlpSettings.Controls.Add(this.cmbAttributeType, 6, 3);
+            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSettings.Controls.Add(this.cmbAttributeType, 5, 3);
             this.tlpSettings.Controls.Add(this.btnLoadFile, 2, 0);
             this.tlpSettings.Controls.Add(this.chkAllInOne, 1, 3);
-            this.tlpSettings.Controls.Add(this.cmbMemberType, 6, 2);
+            this.tlpSettings.Controls.Add(this.cmbMemberType, 5, 2);
             this.tlpSettings.Controls.Add(this.lblFilename, 0, 0);
-            this.tlpSettings.Controls.Add(this.cmbTargetType, 6, 1);
+            this.tlpSettings.Controls.Add(this.cmbTargetType, 5, 1);
             this.tlpSettings.Controls.Add(this.txtFilename, 1, 0);
-            this.tlpSettings.Controls.Add(this.cmbSourceType, 6, 0);
+            this.tlpSettings.Controls.Add(this.cmbSourceType, 5, 0);
             this.tlpSettings.Controls.Add(this.lblRootClass, 0, 1);
             this.tlpSettings.Controls.Add(this.txtNamespace, 1, 2);
             this.tlpSettings.Controls.Add(this.txtRootClass, 1, 1);
             this.tlpSettings.Controls.Add(this.lblNamespace, 0, 2);
-            this.tlpSettings.Controls.Add(this.lblSourceType, 5, 0);
-            this.tlpSettings.Controls.Add(this.lblTargetType, 5, 1);
-            this.tlpSettings.Controls.Add(this.lblMemberType, 5, 2);
-            this.tlpSettings.Controls.Add(this.lblAttributeType, 5, 3);
+            this.tlpSettings.Controls.Add(this.lblSourceType, 4, 0);
+            this.tlpSettings.Controls.Add(this.lblTargetType, 4, 1);
+            this.tlpSettings.Controls.Add(this.lblMemberType, 4, 2);
+            this.tlpSettings.Controls.Add(this.lblAttributeType, 4, 3);
             this.tlpSettings.Location = new System.Drawing.Point(6, 19);
             this.tlpSettings.Name = "tlpSettings";
             this.tlpSettings.RowCount = 4;
@@ -326,21 +369,6 @@ namespace Plexdata.ModelGenerator.Gui
             this.tlpSettings.Size = new System.Drawing.Size(608, 102);
             this.tlpSettings.TabIndex = 0;
             // 
-            // btnCodeText
-            // 
-            this.btnCodeText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCodeText.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightSkyBlue;
-            this.btnCodeText.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Wheat;
-            this.btnCodeText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCodeText.Image = global::Plexdata.ModelGenerator.Gui.Properties.Resources.ButtonCodeSmall;
-            this.btnCodeText.Location = new System.Drawing.Point(302, 3);
-            this.btnCodeText.Name = "btnCodeText";
-            this.btnCodeText.Size = new System.Drawing.Size(19, 19);
-            this.btnCodeText.TabIndex = 3;
-            this.tipMain.SetToolTip(this.btnCodeText, "Provide an alternative source.");
-            this.btnCodeText.UseVisualStyleBackColor = true;
-            this.btnCodeText.Click += new System.EventHandler(this.OnButtonCodeTextClick);
-            // 
             // btnLoadFile
             // 
             this.btnLoadFile.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -348,7 +376,7 @@ namespace Plexdata.ModelGenerator.Gui
             this.btnLoadFile.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Wheat;
             this.btnLoadFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLoadFile.Image = global::Plexdata.ModelGenerator.Gui.Properties.Resources.ButtonDotsSmall;
-            this.btnLoadFile.Location = new System.Drawing.Point(277, 3);
+            this.btnLoadFile.Location = new System.Drawing.Point(289, 3);
             this.btnLoadFile.Name = "btnLoadFile";
             this.btnLoadFile.Size = new System.Drawing.Size(19, 19);
             this.btnLoadFile.TabIndex = 2;
@@ -392,7 +420,7 @@ namespace Plexdata.ModelGenerator.Gui
             // lblSourceType
             // 
             this.lblSourceType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSourceType.Location = new System.Drawing.Point(337, 3);
+            this.lblSourceType.Location = new System.Drawing.Point(324, 3);
             this.lblSourceType.Margin = new System.Windows.Forms.Padding(3);
             this.lblSourceType.Name = "lblSourceType";
             this.lblSourceType.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -403,7 +431,7 @@ namespace Plexdata.ModelGenerator.Gui
             // lblTargetType
             // 
             this.lblTargetType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTargetType.Location = new System.Drawing.Point(337, 28);
+            this.lblTargetType.Location = new System.Drawing.Point(324, 28);
             this.lblTargetType.Margin = new System.Windows.Forms.Padding(3);
             this.lblTargetType.Name = "lblTargetType";
             this.lblTargetType.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -414,7 +442,7 @@ namespace Plexdata.ModelGenerator.Gui
             // lblMemberType
             // 
             this.lblMemberType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblMemberType.Location = new System.Drawing.Point(337, 53);
+            this.lblMemberType.Location = new System.Drawing.Point(324, 53);
             this.lblMemberType.Margin = new System.Windows.Forms.Padding(3);
             this.lblMemberType.Name = "lblMemberType";
             this.lblMemberType.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -425,7 +453,7 @@ namespace Plexdata.ModelGenerator.Gui
             // lblAttributeType
             // 
             this.lblAttributeType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAttributeType.Location = new System.Drawing.Point(337, 78);
+            this.lblAttributeType.Location = new System.Drawing.Point(324, 78);
             this.lblAttributeType.Margin = new System.Windows.Forms.Padding(3);
             this.lblAttributeType.Name = "lblAttributeType";
             this.lblAttributeType.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -445,6 +473,7 @@ namespace Plexdata.ModelGenerator.Gui
             this.MinimumSize = new System.Drawing.Size(660, 500);
             this.Name = "MainWindow";
             this.Text = "Model Generator";
+            this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.OnButtonHelpClick);
             this.tbcCode.ResumeLayout(false);
             this.tbsMain.ResumeLayout(false);
             this.tbsMain.PerformLayout();
@@ -472,7 +501,6 @@ namespace Plexdata.ModelGenerator.Gui
         private System.Windows.Forms.ComboBox cmbMemberType;
         private System.Windows.Forms.ComboBox cmbAttributeType;
         private System.Windows.Forms.Button btnLoadFile;
-        private System.Windows.Forms.Button btnCodeText;
         private System.Windows.Forms.ToolStripButton tbbSave;
         private System.Windows.Forms.CheckBox chkAllInOne;
         private System.Windows.Forms.GroupBox grpSettings;
@@ -486,6 +514,9 @@ namespace Plexdata.ModelGenerator.Gui
         private System.Windows.Forms.Label lblAttributeType;
         private System.Windows.Forms.ToolTip tipMain;
         private System.Windows.Forms.ToolStripButton tbbInfo;
+        private System.Windows.Forms.ToolStripButton tbbSettings;
+        private System.Windows.Forms.ToolStripButton tbbCode;
+        private System.Windows.Forms.ToolStripButton tbbHelp;
     }
 }
 

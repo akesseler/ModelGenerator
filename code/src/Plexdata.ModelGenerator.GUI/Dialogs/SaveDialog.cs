@@ -27,7 +27,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Plexdata.ModelGenerator.GUI.Dialogs
+namespace Plexdata.ModelGenerator.Gui.Dialogs
 {
     public partial class SaveDialog : Form
     {

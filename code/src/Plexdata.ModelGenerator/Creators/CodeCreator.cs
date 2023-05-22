@@ -45,7 +45,7 @@ namespace Plexdata.ModelGenerator.Creators
 
             if (!this.settings.IsValid)
             {
-                throw new ArgumentOutOfRangeException(nameof(settings), "Generator settings are not considered as valid.");
+                throw new ArgumentException("Generator settings are not considered as valid.", nameof(settings));
             }
         }
 
@@ -58,11 +58,6 @@ namespace Plexdata.ModelGenerator.Creators
             if (sources == null)
             {
                 throw new ArgumentNullException(nameof(sources));
-            }
-
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
             }
 
             List<Code> result = new List<Code>();
