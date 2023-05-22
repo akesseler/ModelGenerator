@@ -30,29 +30,15 @@ namespace Plexdata.ModelGenerator.Gui.Settings
     [XmlRoot("settings")]
     public class ProgramSettings
     {
-        #region Private Fields 
-
-        public const Int32 DefaultTop = 100;
-
-        public const Int32 DefaultLeft = 100;
-
-        public const Int32 DefaultHeight = 600;
-
-        public const Int32 DefaultWidth = 500;
-
-        #endregion
-
         #region Construction
 
         public ProgramSettings()
             : base()
         {
-            this.MainWindow = new WindowSettings(
-                ProgramSettings.DefaultLeft, ProgramSettings.DefaultTop,
-                ProgramSettings.DefaultWidth, ProgramSettings.DefaultHeight);
-
+            this.MainWindow = new WindowSettings();
             this.SourceSettings = new SourceSettings();
             this.TargetSettings = new TargetSettings();
+            this.CreateSettings = new CreateSettings();
         }
 
         #endregion
@@ -67,6 +53,9 @@ namespace Plexdata.ModelGenerator.Gui.Settings
 
         [XmlElement("target-settings")]
         public TargetSettings TargetSettings { get; set; }
+
+        [XmlElement("create-settings")]
+        public CreateSettings CreateSettings { get; set; }
 
         #endregion
     }

@@ -23,7 +23,6 @@
  */
 
 using Newtonsoft.Json;
-using Plexdata.ModelGenerator.Extensions;
 using Plexdata.ModelGenerator.Models;
 using System;
 using System.IO;
@@ -108,60 +107,33 @@ namespace Plexdata.ModelGenerator.Parsers
             }
         }
 
-        private Entity GetFixedResult(Entity entity, String xmlns)
+        private Entity GetFixedResult(Entity source, String xmlns)
         {
-            if (entity == null)
+            if (source is null)
             {
-                return entity;
+                return source;
             }
 
-            if (entity.Parent == null)
+            if (source.Parent is null)
             {
-                if (entity.ChildCount > 1)
+                if (source.Children.Count() > 1)
                 {
                     throw new InvalidOperationException("An entity considered as root element contains more than one children.");
                 }
 
                 // Root class must be removed.
 
-                entity = entity.Children.FirstOrDefault();
+                source = source.Children.FirstOrDefault();
 
-                if (entity == null)
+                if (source is null)
                 {
-                    return entity;
+                    return source;
                 }
 
-                Entity result = new Entity(entity.Name, entity.Type, entity.Comment);
-
-                foreach (Entity current in entity.Children)
-                {
-                    result.AddEntity(current);
-                }
-
-                entity = this.GetFixedEntity(result, xmlns);
+                source.ReviseXmlNamespace(xmlns);
             }
 
-            return entity;
-        }
-
-        private Entity GetFixedEntity(Entity entity, String xmlns)
-        {
-            if (entity.IsArray)
-            {
-                entity.Name = entity.Name.ToPlural();
-            }
-
-            if (entity.IsClass)
-            {
-                entity.XmlNamespace = xmlns ?? String.Empty;
-            }
-
-            foreach (Entity current in entity.Children)
-            {
-                this.GetFixedEntity(current, xmlns);
-            }
-
-            return entity;
+            return source;
         }
 
         #endregion

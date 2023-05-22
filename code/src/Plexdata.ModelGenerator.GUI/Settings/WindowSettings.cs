@@ -23,7 +23,6 @@
  */
 
 using Plexdata.ModelGenerator.Gui.Models;
-using System;
 using System.Xml.Serialization;
 
 namespace Plexdata.ModelGenerator.Gui.Settings
@@ -41,15 +40,10 @@ namespace Plexdata.ModelGenerator.Gui.Settings
         #region Construction
 
         public WindowSettings()
-            : this(0, 0, 0, 0)
-        {
-        }
-
-        public WindowSettings(Int32 left, Int32 top, Int32 width, Int32 height)
             : base()
         {
-            this.Location = new Location(left, top);
-            this.Dimension = new Dimension(width, height);
+            this.Location = null;
+            this.Dimension = null;
         }
 
         #endregion
@@ -67,13 +61,10 @@ namespace Plexdata.ModelGenerator.Gui.Settings
             {
                 if (value is null)
                 {
-                    throw new ArgumentException($"{this.Location} must not be null,", nameof(value));
+                    value = new Location(100, 100);
                 }
 
-                if (this.location != value)
-                {
-                    this.location = value;
-                }
+                this.location = value;
             }
         }
 
@@ -88,13 +79,10 @@ namespace Plexdata.ModelGenerator.Gui.Settings
             {
                 if (value is null)
                 {
-                    throw new ArgumentException($"{this.Dimension} must not be null,", nameof(value));
+                    value = new Dimension(500, 600);
                 }
 
-                if (this.dimension != value)
-                {
-                    this.dimension = value;
-                }
+                this.dimension = value;
             }
         }
 

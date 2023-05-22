@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Plexdata Model Generator Help (Settings)</title>
+    <style>
+        body {
+            margin: 2em;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 1.3em;
+        }
+
+        h1 {
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            font-weight: normal;
+            font-variant: small-caps;
+        }
+
+        dt {
+            font-style: italic;
+            margin-top: 0.5em;
+        }
+
+        tr {
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+    <h1>Adjustment</h1>
+    <p>
+        The settings of <em>Adjustment</em> are used to control how classes and their members
+        (properties and/or fields) are named during code generation. All possible options are
+        shown below.
+    </p>
+    <dl>
+        <dt>Enable usage of adjustment feature.</dt>
+        <dd>
+            Any additional class and member name modification is skipped in case of this checkbox
+            is unchecked. Otherwise automatic class and member name adjustment takes place.
+        </dd>
+        <dt>Casing Format</dt>
+        <dd>
+            This selection box allows to choose how class and member renaming should be applied.
+            Possible values are shown below.
+            <table style="margin-top: 0.5em">
+                <tr>
+                    <td style="padding-right: 1em"><em>Unmodified</em></td>
+                    <td>
+                        A renaming of classes and members does not take place and each descriptor
+                        remains unchanged.
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 1em"><em>PascalCase</em></td>
+                    <td>
+                        The naming convention for <em>Pascal Case</em> is applied. This means
+                        that the first letter of each class and member name (property or field)
+                        is converted into upper case.
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 1em"><em>CamelCase</em></td>
+                    <td>
+                        The naming convention for <em>Camel Case</em> is applied. This means
+                        that the first letter of each class and member name (property or field)
+                        is converted into lower case.
+                    </td>
+                </tr>
+            </table>
+        </dd>
+        <dt>Member Prefix</dt>
+        <dd>
+            A string to be prepended to each member name (property or field). A prefix is actually
+            only useful for fields. Please note that each prefix is only applied after the naming
+            convention rules have been applied. Furthermore, please be aware that a prefix is applied
+            as it is, including special characters, whitespaces, etc.
+        </dd>
+        <dt>Member Suffix</dt>
+        <dd>
+            A string to be appended to each member name (property or field). A suffix is actually
+            only useful for fields. Please note that each suffix is only applied after the naming
+            convention rules have been applied. Furthermore, please be aware that a suffix is applied
+            as it is, including special characters, whitespaces, etc.
+        </dd>
+    </dl>
+    <h1>Replacements</h1>
+    <p>
+        Value replacement takes place during model import and is necessary to ensure type
+        dependent properties and fields. In addition, the procedure of value replacement
+        is case sensitive and replaces each fitting word.
+    </p>
+    <p>
+        Put each value to be replaced that can occur in a source model (JSON or XML) into
+        the left column and put the replacement into its corresponding right column cell.
+    </p>
+    <p>
+        The right cell should contain a typed value, for example strings with double quotes,
+        integer numbers with just zero, floating point number with zero&ndash;dot&ndash;zero,
+        date and/or time values with a particular date and/or time, and so on.
+    </p>
+    <h2>Example</h2>
+    <p>
+        The source model may contain the literal &ldquo;integer&rdquo;. But this literal
+        cannot be converted into any valid type, except string. Therefore, each literal
+        &ldquo;integer&rdquo; should be replaced by &ldquo;0&rdquo;, which indeed indicates
+        an integer data type.
+    </p>
+    <p>
+        Another example is the literal &ldquo;number&rdquo; that may represent a decimal value.
+        In such a case it would be useful to replace each &ldquo;number&rdquo; by &ldquo;0.0&rdquo;
+        instead.
+    </p>
+</body>
+</html>

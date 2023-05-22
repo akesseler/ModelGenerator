@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+using Newtonsoft.Json.Linq;
 using Plexdata.ModelGenerator.Defines;
 using Plexdata.ModelGenerator.Extensions;
 using Plexdata.ModelGenerator.Interfaces;
@@ -67,7 +68,7 @@ namespace Plexdata.ModelGenerator.Models
             }
             private set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = new List<String>();
                 }
@@ -101,7 +102,7 @@ namespace Plexdata.ModelGenerator.Models
 
             List<String> lines = new List<String>();
 
-            result.Filename = result.GetFilename(source.Name);
+            result.Filename = result.GetFilename(source.ObjectName);
             result.AddHeader(lines, settings);
             result.AddImports(source, lines, settings);
 
@@ -109,7 +110,7 @@ namespace Plexdata.ModelGenerator.Models
 
             result.AddClassOpen(source, lines, settings);
 
-            result.AddProperties(source, lines, settings);
+            result.AddMembers(source, lines, settings);
 
             result.AddClassClose(lines);
 
@@ -158,7 +159,7 @@ namespace Plexdata.ModelGenerator.Models
             foreach (Class source in sources)
             {
                 result.AddClassOpen(source, lines, settings);
-                result.AddProperties(source, lines, settings);
+                result.AddMembers(source, lines, settings);
                 result.AddClassClose(lines);
                 lines.Add(String.Empty);
             }
@@ -212,7 +213,7 @@ namespace Plexdata.ModelGenerator.Models
 
         protected abstract void AddClassOpen(Class source, IList<String> lines, GeneratorSettings settings);
 
-        protected abstract void AddProperties(Class source, IList<String> lines, GeneratorSettings settings);
+        protected abstract void AddMembers(Class source, IList<String> lines, GeneratorSettings settings);
 
         protected abstract void AddClassClose(IList<String> lines);
 
@@ -251,92 +252,58 @@ namespace Plexdata.ModelGenerator.Models
             return String.Empty.PadLeft(depth, '\t');
         }
 
-        protected String GetPropertyName(Class parent, Property property)
+        protected String GetMemberName(Class parent, Member member)
         {
-            const String suffix = "Value";
-
             if (parent is null)
             {
                 throw new ArgumentNullException(nameof(parent));
             }
 
-            if (property is null)
+            if (member is null)
             {
-                throw new ArgumentNullException(nameof(property));
+                throw new ArgumentNullException(nameof(member));
             }
 
-            if (property.Name == parent.Name)
+            if (parent.ObjectName == member.MemberName)
             {
-                return $"{property.Name}{suffix}";
+                return $"{member.MemberName}Value";
             }
 
-            if (property.IsOrigin)
-            {
-                if (property.Origin.StartsWith("@", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return property.Name;
-                }
-
-                if (property.Origin == "#text")
-                {
-                    if (parent.Name == suffix)
-                    {
-                        return $"{suffix}{property.Name}";
-                    }
-
-                    return $"{suffix}";
-                }
-                else
-                {
-                    return $"{property.Origin}";
-                }
-            }
-            else
-            {
-                return $"{property.Name}";
-            }
+            return member.MemberName;
         }
 
-        protected String GetTypeDescriptor(Property property)
+        protected String GetTypeDescriptor(Member member)
         {
-            if (property is null)
+            if (member is null)
             {
-                throw new ArgumentNullException(nameof(property));
+                throw new ArgumentNullException(nameof(member));
             }
 
-            Entity source = property.Entity;
-
-            String result = source.Type.Name;
-
-            if (source.IsClass)
+            if (member.IsClass)
             {
-                result = $"{source.Name}";
+                return member.ObjectName;
             }
-            else if (source.IsArray)
-            {
-                List<String> entities = source.Children.Select(x => x.Name).Distinct().ToList();
 
-                if (entities.Count != 1)
+            if (member.IsArray)
+            {
+                if (member.Children.Select(x => x.ObjectName).Distinct().Count() != 1)
                 {
-                    throw new InvalidProgramException("More than one type found in child array");
+                    throw new InvalidProgramException("More than one item found that share the same object name.");
                 }
 
-                Entity entity = source.Children.First();
-                String label = String.Empty;
+                Entity entity = member.Children.First();
 
                 if (entity.IsClass)
                 {
-                    label = entity.Name;
+                    return String.Format(this.ArrayTypeFormat, entity.ObjectName);
                 }
                 else
                 {
-                    label = entity.Type.Name;
+                    return String.Format(this.ArrayTypeFormat, entity.MemberType.Name);
                 }
-
-                result = String.Format(this.ArrayTypeFormat, label);
             }
 
-            return result;
+            return member.MemberType.Name;
         }
 
         protected Boolean TryGetAttribute(GeneratorSettings settings, Class source, out String attribute)
@@ -357,15 +324,15 @@ namespace Plexdata.ModelGenerator.Models
             {
                 if (source.IsClass)
                 {
-                    if (source.Entity.HasXmlNamespace)
+                    if (source.IsXmlNamespace)
                     {
                         attribute = String.Format("XmlRoot({0}, {1})",
-                            String.Format(this.XmlElementNameFormat, source.ClassName),
-                            String.Format(this.XmlNamespaceFormat, source.Entity.XmlNamespace));
+                            String.Format(this.XmlElementNameFormat, source.SourceName),
+                            String.Format(this.XmlNamespaceFormat, source.XmlNamespace));
                     }
                     else
                     {
-                        attribute = String.Format("XmlRoot(\"{0}\")", source.ClassName);
+                        attribute = String.Format("XmlRoot(\"{0}\")", source.SourceName);
                     }
 
                     return true;
@@ -375,7 +342,7 @@ namespace Plexdata.ModelGenerator.Models
             return false;
         }
 
-        protected Boolean TryGetAttribute(GeneratorSettings settings, Property source, out String attribute)
+        protected Boolean TryGetAttribute(GeneratorSettings settings, Member source, out String attribute)
         {
             attribute = String.Empty;
 
@@ -394,48 +361,52 @@ namespace Plexdata.ModelGenerator.Models
                 switch (settings.AttributeType)
                 {
                     case AttributeType.Newtonsoft:
-                        attribute = $"JsonProperty(\"{source.AttributeName}\")";
+                        attribute = $"JsonProperty(\"{source.SourceName}\")";
                         return true;
                     case AttributeType.Microsoft:
-                        attribute = $"JsonPropertyName(\"{source.AttributeName}\")";
+                        attribute = $"JsonPropertyName(\"{source.SourceName}\")";
                         return true;
                     default:
                         return false;
                 }
             }
-            else if (settings.SourceType == SourceType.Xml)
+
+            if (settings.SourceType == SourceType.Xml)
             {
-                if (source.Origin.StartsWith("@", StringComparison.InvariantCultureIgnoreCase))
+                // Newtonsoft's JSON parser indicates attributes by prepending an '@' character.
+                if (source.SourceName.StartsWith("@", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    attribute = $"XmlAttribute(\"{source.Origin.TrimStart('@')}\")";
+                    attribute = $"XmlAttribute(\"{source.SourceName.TrimStart('@')}\")";
                     return true;
                 }
 
-                if (source.Entity.Type == typeof(XmlCDataSection))
+                if (source.MemberType == typeof(XmlCDataSection))
                 {
                     // Keep in mind, CDATA can only be part of an XML element. Using CDATA inside an XML attribute
                     // or inside an XML text will/may cause an exception when using Microsoft's XmlSerializer.
 
                     if (settings.TargetType == TargetType.VisualBasic)
                     {
-                        attribute = $"XmlElement(\"{source.AttributeName}\", GetType({nameof(XmlCDataSection)}))";
+                        attribute = $"XmlElement(\"{source.SourceName}\", GetType({nameof(XmlCDataSection)}))";
                     }
                     else
                     {
-                        attribute = $"XmlElement(\"{source.AttributeName}\", typeof({nameof(XmlCDataSection)}))";
+                        attribute = $"XmlElement(\"{source.SourceName}\", typeof({nameof(XmlCDataSection)}))";
                     }
 
                     return true;
                 }
 
-                if (source.Origin.Equals("#text", StringComparison.InvariantCultureIgnoreCase))
+                // Newtonsoft's JSON parser indicates XML text fields by using tag '#text'.
+                if (source.SourceName.Equals("#text", StringComparison.InvariantCultureIgnoreCase))
                 {
                     // Must be XmlText no matter what the real type is!
                     attribute = "XmlText";
                     return true;
                 }
 
-                attribute = $"XmlElement(\"{source.AttributeName}\")";
+                // In any other case it must be an XML element.
+                attribute = $"XmlElement(\"{source.SourceName}\")";
                 return true;
             }
 

@@ -33,7 +33,7 @@ namespace Plexdata.ModelGenerator.Models
     {
         #region Private Fields 
 
-        private List<Property> properties = null;
+        private List<Member> members = null;
 
         #endregion
 
@@ -42,9 +42,9 @@ namespace Plexdata.ModelGenerator.Models
         public Class(Entity source)
             : base(source)
         {
-            if (!base.Entity.IsClass)
+            if (!base.IsClass)
             {
-                throw new InvalidCastException($"Entity {base.Entity.Name} could not be considered as class.");
+                throw new InvalidCastException($"Entity {base.ObjectName} could not be considered as class.");
             }
         }
 
@@ -52,44 +52,21 @@ namespace Plexdata.ModelGenerator.Models
 
         #region Public Properties
 
-        public String ClassName
+        public IEnumerable<Member> Members
         {
             get
             {
-                return base.IsOrigin ? base.Origin : base.Name;
-            }
-        }
-
-        public IEnumerable<String> Namespaces
-        {
-            get
-            {
-                List<String> namespaces = base.Entity.Children.Select(x => x.Namespace).ToList();
-
-                if (base.Entity.Children.Any(x => x.IsArray))
+                if (this.members == null || this.members.Count != base.Children.Count())
                 {
-                    namespaces.Add(typeof(List<Object>).Namespace);
-                }
+                    this.members = new List<Member>();
 
-                return namespaces.Distinct();
-            }
-        }
-
-        public IEnumerable<Property> Properties
-        {
-            get
-            {
-                if (this.properties == null || this.properties.Count != base.Entity.Children.Count())
-                {
-                    this.properties = new List<Property>();
-
-                    foreach (Entity entity in base.Entity.Children)
+                    foreach (Entity entity in base.Children)
                     {
-                        this.properties.Add(new Property(entity));
+                        this.members.Add(new Member(entity));
                     }
                 }
 
-                return this.properties;
+                return this.members;
             }
         }
 
@@ -97,15 +74,30 @@ namespace Plexdata.ModelGenerator.Models
 
         #region Public Methods
 
+        public IEnumerable<String> CollectNamespaces(IEnumerable<String> defaults)
+        {
+            IEnumerable<String> result = base.Children.Select(x => x.MemberType.Namespace);
+
+            if (base.Children.Any(x => x.IsArray))
+            {
+                result.Append(typeof(List<Object>).Namespace);
+            }
+
+            if (defaults?.Any() ?? false)
+            {
+                result = result.Concat(defaults);
+            }
+
+            return result.Distinct().OrderBy(x => x);
+        }
+
         public override String ToString()
         {
             StringBuilder builder = new StringBuilder(base.ToString());
 
             if (builder.Length > 0) { builder.Append(", "); }
 
-            builder.AppendFormat("{0}: {1}, ", nameof(this.ClassName), this.ClassName);
-
-            builder.AppendFormat("{0}: {1}, ", nameof(this.Properties), this.properties?.Count ?? 0);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.Members), this.members?.Count ?? 0);
 
             return builder.ToString().TrimEnd(' ', ',');
         }

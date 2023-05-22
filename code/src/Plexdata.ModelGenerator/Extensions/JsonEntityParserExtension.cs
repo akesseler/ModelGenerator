@@ -70,7 +70,7 @@ namespace Plexdata.ModelGenerator.Extensions
                 throw new ArgumentNullException(nameof(source));
             }
 
-            List<Delegate> delegates = new List<Delegate>();
+            IEnumerable<Delegate> delegates;
 
             switch (source.Type)
             {
@@ -143,7 +143,7 @@ namespace Plexdata.ModelGenerator.Extensions
 
         private static Type TryGetTypeOfInt32(Object value)
         {
-            if (Int32.TryParse(value?.ToString(), out Int32 result))
+            if (Int32.TryParse(value?.ToString(), out Int32 _))
             {
                 return typeof(Int32);
             }
@@ -153,7 +153,7 @@ namespace Plexdata.ModelGenerator.Extensions
 
         private static Type TryGetTypeOfInt64(Object value)
         {
-            if (Int64.TryParse(value?.ToString(), out Int64 result))
+            if (Int64.TryParse(value?.ToString(), out Int64 _))
             {
                 return typeof(Int64);
             }
@@ -163,7 +163,7 @@ namespace Plexdata.ModelGenerator.Extensions
 
         private static Type TryGetTypeOfUInt32(Object value)
         {
-            if (UInt32.TryParse(value?.ToString(), out UInt32 result))
+            if (UInt32.TryParse(value?.ToString(), out UInt32 _))
             {
                 return typeof(UInt32);
             }
@@ -173,7 +173,7 @@ namespace Plexdata.ModelGenerator.Extensions
 
         private static Type TryGetTypeOfUInt64(Object value)
         {
-            if (UInt64.TryParse(value?.ToString(), out UInt64 result))
+            if (UInt64.TryParse(value?.ToString(), out UInt64 _))
             {
                 return typeof(UInt64);
             }
@@ -187,7 +187,7 @@ namespace Plexdata.ModelGenerator.Extensions
 
         private static Type TryGetTypeOfDecimal(Object value)
         {
-            if (Decimal.TryParse(value?.ToString(), out Decimal result))
+            if (Decimal.TryParse(value?.ToString(), out Decimal _))
             {
                 return typeof(Decimal);
             }
@@ -197,7 +197,7 @@ namespace Plexdata.ModelGenerator.Extensions
 
         private static Type TryGetTypeOfDouble(Object value)
         {
-            if (Double.TryParse(value?.ToString(), out Double result))
+            if (Double.TryParse(value?.ToString(), out Double _))
             {
                 return typeof(Double);
             }
@@ -211,7 +211,7 @@ namespace Plexdata.ModelGenerator.Extensions
 
         private static Type TryGetTypeOfGuid(Object value)
         {
-            if (Guid.TryParse(value?.ToString(), out Guid result))
+            if (Guid.TryParse(value?.ToString(), out Guid _))
             {
                 return typeof(Guid);
             }
@@ -298,7 +298,7 @@ namespace Plexdata.ModelGenerator.Extensions
 
         private static Type TryGetTypeOfDateTime(Object value)
         {
-            if (DateTime.TryParse(value?.ToString(), out DateTime result))
+            if (DateTime.TryParse(value?.ToString(), out DateTime _))
             {
                 return typeof(DateTime);
             }

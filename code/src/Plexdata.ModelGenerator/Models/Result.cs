@@ -23,71 +23,60 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Plexdata.ModelGenerator.Models
 {
     internal class Result
     {
+        #region Private Fields 
+
+        private readonly Entity entity = null;
+
+        #endregion 
+
         #region Construction
 
         protected Result(Entity entity)
             : base()
         {
-            this.Entity = entity ?? throw new ArgumentNullException(nameof(entity));
+            this.entity = entity ?? throw new ArgumentNullException(nameof(entity));
         }
 
         #endregion
 
         #region Public Properties
 
-        public Entity Entity { get; } = null;
-
-        public virtual String Name
+        public String SourceName
         {
             get
             {
-                return this.Entity.Name;
+                return this.entity.SourceName;
             }
         }
 
-        public virtual Boolean IsArray
+        public String ObjectName
         {
             get
             {
-                return this.Entity.IsArray;
+                return this.entity.ObjectName;
             }
         }
 
-        public virtual Boolean IsClass
+        public String MemberName
         {
             get
             {
-                return this.Entity.IsClass;
+                return this.entity.MemberName;
             }
         }
 
-        public virtual Boolean IsOrigin
+        public Type MemberType
         {
             get
             {
-                return this.Entity.IsOrigin;
-            }
-        }
-
-        public virtual String Origin
-        {
-            get
-            {
-                return this.Entity.Origin;
-            }
-        }
-
-        public virtual Boolean IsComment
-        {
-            get
-            {
-                return !String.IsNullOrWhiteSpace(this.Comment);
+                return this.entity.MemberType;
             }
         }
 
@@ -95,7 +84,59 @@ namespace Plexdata.ModelGenerator.Models
         {
             get
             {
-                return this.Entity.Comment;
+                return this.entity.Comment;
+            }
+        }
+
+        public String XmlNamespace
+        {
+            get
+            {
+                return this.entity.XmlNamespace;
+            }
+        }
+
+        public virtual Boolean IsArray
+        {
+            get
+            {
+                return this.entity.IsArray;
+            }
+        }
+
+        public virtual Boolean IsClass
+        {
+            get
+            {
+                return this.entity.IsClass;
+            }
+        }
+
+        public virtual Boolean IsComment
+        {
+            get
+            {
+                return this.entity.IsComment;
+            }
+        }
+
+        public Boolean IsXmlNamespace
+        {
+            get
+            {
+                return this.entity.IsXmlNamespace;
+            }
+        }
+
+        #endregion
+
+        #region Protected Properties
+
+        protected IEnumerable<Entity> Children
+        {
+            get
+            {
+                return this.entity.Children;
             }
         }
 
@@ -105,25 +146,16 @@ namespace Plexdata.ModelGenerator.Models
 
         public override String ToString()
         {
-            StringBuilder builder = new StringBuilder(128);
+            StringBuilder builder = new StringBuilder(256);
 
-            builder.AppendFormat("{0}: {1}, ", nameof(this.Name), this.Name);
-            builder.AppendFormat("{0}: {1}, ", nameof(this.Entity.Type), this.Entity.Type);
-
-            if (this.IsOrigin)
-            {
-                builder.AppendFormat("{0}: {1}, ", nameof(this.Origin), this.Origin);
-            }
-
-            if (this.IsClass)
-            {
-                builder.AppendFormat("{0}: {1}, ", nameof(this.IsClass), Boolean.TrueString);
-            }
-
-            if (this.IsArray)
-            {
-                builder.AppendFormat("{0}: {1}, ", nameof(this.IsArray), Boolean.TrueString);
-            }
+            builder.AppendFormat("{0}: {1}, ", nameof(this.SourceName), this.SourceName);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.ObjectName), this.ObjectName);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.MemberName), this.MemberName);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.MemberType), this.MemberType);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.IsClass), this.IsClass ? Boolean.TrueString : Boolean.FalseString);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.IsArray), this.IsArray ? Boolean.TrueString : Boolean.FalseString);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.IsComment), this.IsComment ? Boolean.TrueString : Boolean.FalseString);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.IsXmlNamespace), this.IsXmlNamespace ? Boolean.TrueString : Boolean.FalseString);
 
             return builder.ToString().TrimEnd(' ', ',');
         }

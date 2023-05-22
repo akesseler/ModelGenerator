@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
+using Plexdata.ModelGenerator.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 
 namespace Plexdata.ModelGenerator.Models
@@ -33,15 +33,7 @@ namespace Plexdata.ModelGenerator.Models
     {
         #region Private Fields 
 
-        private String name = String.Empty;
-
-        private Type type = null;
-
-        private String origin = String.Empty;
-
-        private String comment = String.Empty;
-
-        private readonly List<Entity> children = null;
+        private readonly List<Entity> children = new List<Entity>();
 
         #endregion
 
@@ -50,79 +42,69 @@ namespace Plexdata.ModelGenerator.Models
         private Entity()
             : base()
         {
-            this.name = String.Empty;
-            this.type = null;
-            this.origin = String.Empty;
-            this.comment = String.Empty;
-            this.XmlNamespace = String.Empty;
-
-            this.children = new List<Entity>();
         }
 
-        public Entity(String name)
-            : this(name, null, null)
+        private Entity(String sourceName, Type memberType, String comment)
+            : this()
         {
+            this.SourceName = sourceName;
+            this.ObjectName = String.Empty;
+            this.MemberName = String.Empty;
+            this.MemberType = memberType ?? typeof(Object);
+            this.Comment = (comment ?? String.Empty).Trim();
+            this.Parent = null;
+            this.XmlNamespace = null;
         }
 
-        public Entity(String name, Type type)
-            : this(name, type, null)
+        private Entity(Entity other)
+            : this()
         {
-        }
+            this.SourceName = other.SourceName;
+            this.ObjectName = other.ObjectName;
+            this.MemberName = other.MemberName;
+            this.MemberType = other.MemberType;
+            this.Comment = other.Comment;
+            this.Parent = other.Parent;
+            this.XmlNamespace = other.XmlNamespace;
 
-        public Entity(String name, Type type, String comment)
-            : base()
-        {
-            this.Name = name;
-            this.Type = type;
-            this.Comment = comment;
-            this.XmlNamespace = String.Empty;
-
-            this.children = new List<Entity>();
+            foreach (Entity child in other.children)
+            {
+                this.AddChildEntity(child.Clone() as Entity);
+            }
         }
 
         #endregion
 
         #region Public Properties
 
-        public String Name
+        public String SourceName
         {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                if (String.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(this.Name));
-                }
-
-                value = value.Trim();
-
-                this.name = this.BuildName(value);
-
-                if (!String.Equals(this.name, value))
-                {
-                    this.Origin = value;
-                }
-            }
+            get;
+            private set;
         }
 
-        public Type Type
+        public String ObjectName
         {
-            get
-            {
-                return this.type;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    value = typeof(Object);
-                }
+            get;
+            private set;
+        }
 
-                this.type = value;
-            }
+        public String MemberName
+        {
+            get;
+            private set;
+        }
+
+        public Type MemberType
+        {
+            get;
+            private set;
+        }
+
+        public String Comment
+        {
+            get;
+            private set;
         }
 
         public Entity Parent
@@ -131,113 +113,10 @@ namespace Plexdata.ModelGenerator.Models
             private set;
         }
 
-        public String Path
-        {
-            get
-            {
-                List<String> pieces = new List<String>();
-
-                pieces.Insert(0, this.Name);
-
-                Entity parent = this.Parent;
-
-                while (parent != null)
-                {
-                    pieces.Insert(0, parent.Name);
-
-                    parent = parent.Parent;
-                }
-
-                return String.Join(".", pieces);
-            }
-        }
-
-        public String Namespace
-        {
-            get
-            {
-                return this.Type.Namespace;
-            }
-        }
-
         public String XmlNamespace
         {
             get;
-            set;
-        }
-
-        public Boolean HasXmlNamespace
-        {
-            get
-            {
-                return !String.IsNullOrWhiteSpace(this.XmlNamespace);
-            }
-        }
-
-        public String Origin
-        {
-            get
-            {
-                return this.origin;
-            }
-            private set
-            {
-                if (String.IsNullOrWhiteSpace(value))
-                {
-                    value = String.Empty;
-                }
-
-                this.origin = value.Trim();
-            }
-        }
-
-        public Boolean IsOrigin
-        {
-            get
-            {
-                return !String.IsNullOrWhiteSpace(this.Origin);
-            }
-        }
-
-        public String Comment
-        {
-            get
-            {
-                return this.comment;
-            }
-            set
-            {
-                if (String.IsNullOrWhiteSpace(value))
-                {
-                    value = String.Empty;
-                }
-
-                this.comment = value.Trim();
-            }
-        }
-
-        public virtual Boolean IsComment
-        {
-            get
-            {
-                return !String.IsNullOrWhiteSpace(this.Comment);
-            }
-        }
-
-        public Boolean IsClass
-        {
-            get
-            {
-                return this.Type == typeof(Object) && this.children.Count > 0;
-            }
-        }
-
-        public Boolean IsArray
-        {
-            get
-            {
-                return this.Type == typeof(Array) && this.children.Count > 0;
-            }
+            private set;
         }
 
         public IEnumerable<Entity> Children
@@ -248,11 +127,35 @@ namespace Plexdata.ModelGenerator.Models
             }
         }
 
-        public Int32 ChildCount
+        public Boolean IsClass
         {
             get
             {
-                return this.children.Count;
+                return this.MemberType == typeof(Object) && this.children.Count > 0;
+            }
+        }
+
+        public Boolean IsArray
+        {
+            get
+            {
+                return this.MemberType == typeof(Array) && this.children.Count > 0;
+            }
+        }
+
+        public Boolean IsComment
+        {
+            get
+            {
+                return !String.IsNullOrWhiteSpace(this.Comment);
+            }
+        }
+
+        public Boolean IsXmlNamespace
+        {
+            get
+            {
+                return !String.IsNullOrWhiteSpace(this.XmlNamespace);
             }
         }
 
@@ -260,54 +163,99 @@ namespace Plexdata.ModelGenerator.Models
 
         #region Public Methods
 
-        public void AddEntity(Entity entity)
+        public static Entity Create(AdjustmentSettings settings, String sourceName, Type memberType = null, String comment = null)
         {
-            if (entity != null)
+            if (settings is null)
             {
-                entity.Parent = this;
+                throw new ArgumentNullException(nameof(settings), $"Parameter '{nameof(settings)}' cannot be null.");
+            }
 
-                this.children.Add(entity);
+            if (String.IsNullOrWhiteSpace(sourceName))
+            {
+                throw new ArgumentOutOfRangeException(nameof(sourceName), $"Parameter '{nameof(sourceName)}' cannot be null, empty or whitespace.");
+            }
+
+            Boolean plural = memberType == typeof(Array);
+
+            return new Entity(sourceName, memberType, comment)
+            {
+                ObjectName = sourceName.CreateObjectName(settings),
+                MemberName = sourceName.CreateMemberName(settings, plural),
+            };
+        }
+
+        public void AddChildEntity(Entity childEntity)
+        {
+            if (childEntity is null)
+            {
+                return;
+            }
+
+            childEntity.Parent = this;
+
+            this.children.Add(childEntity);
+        }
+
+        public void AddMemberNameIndex(Int32 index)
+        {
+            this.MemberName += index.ToString();
+        }
+
+        public void ReviseMemberType(Type memberType)
+        {
+            this.MemberType = memberType ?? typeof(Object);
+        }
+
+        public void ReviseComment(String comment)
+        {
+            this.Comment = (comment ?? String.Empty).Trim();
+        }
+
+        public void ReviseXmlNamespace(String xmlns)
+        {
+            if (this.IsClass)
+            {
+                this.XmlNamespace = xmlns ?? String.Empty;
+            }
+
+            foreach (Entity current in this.Children)
+            {
+                current.ReviseXmlNamespace(xmlns);
             }
         }
 
         public Object Clone()
         {
-            Entity clone = new Entity();
-
-            clone.name = this.name;
-            clone.type = this.type;
-            clone.origin = this.origin;
-            clone.comment = this.comment;
-            clone.XmlNamespace = this.XmlNamespace;
-
-            foreach (Entity child in this.children)
-            {
-                clone.AddEntity(child.Clone() as Entity);
-            }
-
-            return clone;
+            return new Entity(this);
         }
 
         public override String ToString()
         {
-            StringBuilder builder = new StringBuilder(128);
+            StringBuilder builder = new StringBuilder(256);
 
-            builder.AppendFormat("{0}: {1}, ", nameof(this.Name), this.Name);
-            builder.AppendFormat("{0}: {1}, ", nameof(this.Type), this.Type);
-
-            if (this.IsOrigin)
-            {
-                builder.AppendFormat("{0}: {1}, ", nameof(this.Origin), this.Origin);
-            }
+            builder.AppendFormat("{0}: {1}, ", nameof(this.SourceName), this.SourceName);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.ObjectName), this.ObjectName);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.MemberName), this.MemberName);
+            builder.AppendFormat("{0}: {1}, ", nameof(this.MemberType), this.MemberType);
 
             if (this.IsClass)
             {
                 builder.AppendFormat("{0}: {1}, ", nameof(this.IsClass), Boolean.TrueString);
             }
 
+            if (this.IsArray)
+            {
+                builder.AppendFormat("{0}: {1}, ", nameof(this.IsArray), Boolean.TrueString);
+            }
+
             if (this.IsComment)
             {
-                builder.AppendFormat("{0}: {1}, ", nameof(this.Comment), Boolean.TrueString);
+                builder.AppendFormat("{0}: {1}, ", nameof(this.IsComment), Boolean.TrueString);
+            }
+
+            if (this.IsXmlNamespace)
+            {
+                builder.AppendFormat("{0}: {1}, ", nameof(this.IsXmlNamespace), Boolean.TrueString);
             }
 
             if (this.children.Count > 0)
@@ -316,57 +264,6 @@ namespace Plexdata.ModelGenerator.Models
             }
 
             return builder.ToString().TrimEnd(' ', ',');
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private String BuildName(String label)
-        {
-            StringBuilder builder = new StringBuilder(128);
-
-            // Don't change label if it is already in right casing...
-
-            foreach (Char current in label.ToCharArray())
-            {
-                if (Char.IsLetterOrDigit(current))
-                {
-                    builder.Append(current);
-                }
-            }
-
-            if (builder.Length == label.Length)
-            {
-                if (Char.IsDigit(builder[0]))
-                {
-                    builder.Insert(0, 'N');
-                }
-
-                if (Char.IsLower(builder[0]))
-                {
-                    builder[0] = Char.ToUpper(builder[0]);
-                }
-
-                return builder.ToString();
-            }
-
-            builder.Clear();
-
-            foreach (Char current in CultureInfo.InvariantCulture.TextInfo.ToTitleCase(label.ToLowerInvariant()).ToCharArray())
-            {
-                if (Char.IsLetterOrDigit(current))
-                {
-                    builder.Append(current);
-                }
-            }
-
-            if (Char.IsDigit(builder[0]))
-            {
-                builder.Insert(0, 'N');
-            }
-
-            return builder.ToString();
         }
 
         #endregion

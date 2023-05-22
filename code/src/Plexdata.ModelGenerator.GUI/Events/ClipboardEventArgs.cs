@@ -40,7 +40,7 @@ namespace Plexdata.ModelGenerator.Gui.Events
 
         #region Public Properties
 
-        public string Text { get; private set; }
+        public String Text { get; private set; }
 
         #endregion
     }

@@ -29,13 +29,12 @@ using System.Xml.Serialization;
 namespace Plexdata.ModelGenerator.Gui.Models
 {
     [XmlType("location")]
-    [DebuggerDisplay("Left = {this.Left}, Top = {this.Top}")]
+    [DebuggerDisplay("{GetDebuggerDisplay(),nq}")]
     public class Location
     {
         #region Private Fields 
 
         private Int32 left = 0;
-
         private Int32 top = 0;
 
         #endregion
@@ -88,6 +87,15 @@ namespace Plexdata.ModelGenerator.Gui.Models
                     this.top = value;
                 }
             }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private String GetDebuggerDisplay()
+        {
+            return $"{nameof(this.Left)}: '{this.Left}'; {nameof(this.Top)}: '{this.Top}'";
         }
 
         #endregion

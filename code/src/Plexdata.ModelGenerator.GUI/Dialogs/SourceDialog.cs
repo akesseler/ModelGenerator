@@ -25,7 +25,12 @@
 using Newtonsoft.Json;
 using Plexdata.ModelGenerator.Defines;
 using Plexdata.ModelGenerator.Gui.Events;
+using Plexdata.ModelGenerator.Gui.Extensions;
+using Plexdata.ModelGenerator.Gui.Models;
+using Plexdata.ModelGenerator.Gui.Settings;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -39,7 +44,7 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
         #region Private Fields
 
         private readonly String caption = String.Empty;
-
+        private readonly CreateSettings settings = null;
         private SourceType type = SourceType.Unknown;
 
         #endregion
@@ -47,22 +52,20 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
         #region Construction
 
         public SourceDialog()
-            : this(null, SourceType.Unknown)
+            : this(SourceType.Unknown, null)
         {
         }
 
-        public SourceDialog(String source, SourceType type)
+        public SourceDialog(SourceType type, CreateSettings settings)
             : base()
         {
             this.InitializeComponent();
 
             this.caption = this.Text;
+            this.settings = settings ?? new CreateSettings();
 
-            this.txtSource.IsEditing = this.chkEditing.Checked;
-
+            this.txtSource.IsEditing = false; // Edit mode distinction is no longer supported.
             this.txtSource.OnPaste += this.OnSourcePaste;
-
-            this.ApplyContent(source, type);
         }
 
         #endregion
@@ -97,6 +100,44 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
 
         #endregion
 
+        #region Protected Methods
+
+        protected override void OnClosing(CancelEventArgs args)
+        {
+            base.OnClosing(args);
+
+            if (base.DialogResult != DialogResult.OK)
+            {
+                return;
+            }
+
+            if (this.Type != SourceType.Unknown && !String.IsNullOrWhiteSpace(this.Source))
+            {
+                return;
+            }
+
+            String result;
+
+            if (this.Type == SourceType.Unknown && this.TryFormatJson(this.Source, out result))
+            {
+                this.Source = result;
+                this.Type = SourceType.Json;
+                return;
+            }
+
+            if (this.Type == SourceType.Unknown && this.TryFormatXml(this.Source, out result))
+            {
+                this.Source = result;
+                this.Type = SourceType.Xml;
+                return;
+            }
+
+            this.Source = String.Empty;
+            this.Type = SourceType.Unknown;
+        }
+
+        #endregion
+
         #region Private Events
 
         private void OnSourcePaste(Object sender, ClipboardEventArgs args)
@@ -117,57 +158,36 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
                 return;
             }
 
-            this.ShowError("Unable to paste document, neither as JSON nor as XML. Maybe enable edit mode and try again.");
-        }
-
-        private void OnEditingCheckedChanged(Object sender, EventArgs args)
-        {
-            this.txtSource.IsEditing = this.chkEditing.Checked;
+            this.ShowError("Unable to paste document, neither as JSON nor as XML.");
         }
 
         #endregion
 
         #region Private Methods
 
-        private void ApplyContent(String source, SourceType type)
-        {
-            try
-            {
-                switch (type)
-                {
-                    case SourceType.Json:
-                        this.Source = this.FormatJson(source);
-                        this.Type = SourceType.Json;
-                        break;
-                    case SourceType.Xml:
-                        this.Source = this.FormatXml(source);
-                        this.Type = SourceType.Xml;
-                        break;
-                    default:
-                        this.Source = null;
-                        this.Type = SourceType.Unknown;
-                        break;
-                }
-            }
-            catch (Exception exception)
-            {
-                this.ShowError(exception);
-            }
-        }
-
         private Boolean TryFormatJson(String source, out String result)
         {
             result = String.Empty;
 
+            // This is certainly not really an elegant solution
+            // but unfortunately necessary to figure out valid
+            // source data.
             try
             {
-                result = this.FormatJson(source);
+                result = this.FormatJson(source, true);
                 return true;
             }
-            catch (Exception exception)
+            catch
             {
-                System.Diagnostics.Debug.WriteLine(exception);
-                return false;
+                try
+                {
+                    result = this.FormatJson(source, false);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
@@ -175,34 +195,54 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
         {
             result = String.Empty;
 
+            // This is certainly not really an elegant solution
+            // but unfortunately necessary to figure out valid
+            // source data.
             try
             {
-                result = this.FormatXml(source);
+                result = this.FormatXml(source, true);
                 return true;
             }
-            catch (Exception exception)
+            catch
             {
-                System.Diagnostics.Debug.WriteLine(exception);
-                return false;
+                try
+                {
+                    result = this.FormatXml(source, false);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
-        private String FormatJson(String source)
+        private String FormatJson(String source, Boolean replace)
         {
             if (String.IsNullOrWhiteSpace(source))
             {
                 return source;
+            }
+
+            if (replace)
+            {
+                source = this.Replace(source, this.settings.JsonReplacements);
             }
 
             Object parsed = JsonConvert.DeserializeObject(source);
             return JsonConvert.SerializeObject(parsed, Newtonsoft.Json.Formatting.Indented);
         }
 
-        private String FormatXml(String source)
+        private String FormatXml(String source, Boolean replace)
         {
             if (String.IsNullOrWhiteSpace(source))
             {
                 return source;
+            }
+
+            if (replace)
+            {
+                source = this.Replace(source, this.settings.XmlReplacements);
             }
 
             XmlDocument document = this.LoadDocument(source);
@@ -262,14 +302,16 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
             }
         }
 
-        private void ShowError(String message)
+        private String Replace(String source, IEnumerable<Replacement> replacements)
         {
-            MessageBox.Show(this, message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
+            String result = source;
 
-        private void ShowError(Exception exception)
-        {
-            this.ShowError(exception.Message);
+            foreach (Replacement replacement in replacements)
+            {
+                result = result.Replace(replacement.Source, replacement.Target);
+            }
+
+            return result;
         }
 
         #endregion

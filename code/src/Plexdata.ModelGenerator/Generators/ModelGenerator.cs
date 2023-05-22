@@ -30,6 +30,7 @@ using Plexdata.ModelGenerator.Parsers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace Plexdata.ModelGenerator.Generators
 {
@@ -57,7 +58,7 @@ namespace Plexdata.ModelGenerator.Generators
                 throw new ArgumentOutOfRangeException(nameof(source), "Source string must not be null, empty, or contain only whitespaces.");
             }
 
-            IEntityParser parser = null;
+            IEntityParser parser;
 
             switch (settings.SourceType)
             {
@@ -73,6 +74,8 @@ namespace Plexdata.ModelGenerator.Generators
 
             Entity entity = parser.Parse(source);
 
+            ModelGenerator.FixDuplicateMemberNames(entity);
+
             IEnumerable<Class> classes = ModelGenerator.CreateClasses(settings, entity);
 
             IEnumerable<ICode> results = ModelGenerator.CreateResults(settings, classes);
@@ -83,6 +86,27 @@ namespace Plexdata.ModelGenerator.Generators
         #endregion
 
         #region Private Methods
+
+        private static void FixDuplicateMemberNames(Entity entity)
+        {
+            // JSON may not allow duplicate member names. XML instead can have
+            // tags that are different but result in non-unique member names.
+
+            foreach (IGrouping<String, Entity> duplicates in entity.Children.GroupBy(x => x.MemberName).Where(y => y.Count() > 1))
+            {
+                Int32 index = 1;
+
+                foreach (Entity duplicate in duplicates)
+                {
+                    duplicate.AddMemberNameIndex(index++);
+                }
+            }
+
+            foreach (Entity current in entity.Children)
+            {
+                ModelGenerator.FixDuplicateMemberNames(current);
+            }
+        }
 
         private static IEnumerable<Class> CreateClasses(GeneratorSettings settings, Entity entity)
         {

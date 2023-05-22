@@ -56,7 +56,6 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SourceDialog));
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
-            this.chkEditing = new System.Windows.Forms.CheckBox();
             this.ttsMain = new System.Windows.Forms.ToolTip(this.components);
             this.lblGeneral = new System.Windows.Forms.Label();
             this.txtSource = new Plexdata.ModelGenerator.Gui.Controls.TextBoxEx();
@@ -84,30 +83,16 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
             this.btnApply.Text = "&Apply";
             this.btnApply.UseVisualStyleBackColor = true;
             // 
-            // chkEditing
-            // 
-            this.chkEditing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkEditing.AutoSize = true;
-            this.chkEditing.Location = new System.Drawing.Point(12, 430);
-            this.chkEditing.Name = "chkEditing";
-            this.chkEditing.Size = new System.Drawing.Size(111, 17);
-            this.chkEditing.TabIndex = 1;
-            this.chkEditing.Text = "&Enable edit mode.";
-            this.ttsMain.SetToolTip(this.chkEditing, "Disable edit mode to be able to paste complete documents.");
-            this.chkEditing.UseVisualStyleBackColor = true;
-            this.chkEditing.CheckedChanged += new System.EventHandler(this.OnEditingCheckedChanged);
-            // 
             // lblGeneral
             // 
             this.lblGeneral.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblGeneral.Location = new System.Drawing.Point(12, 13);
             this.lblGeneral.Name = "lblGeneral";
-            this.lblGeneral.Size = new System.Drawing.Size(560, 59);
+            this.lblGeneral.Size = new System.Drawing.Size(560, 33);
             this.lblGeneral.TabIndex = 4;
             this.lblGeneral.Text = "Provide the source to be used to generate classes from, or paste a complete docum" +
-    "ent (JSON or XML) from the Clipboard. You may need to enable edit mode when chan" +
-    "ging the source manually.";
+    "ent (JSON or XML) from the Clipboard.";
             // 
             // txtSource
             // 
@@ -118,11 +103,11 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSource.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSource.IsEditing = false;
-            this.txtSource.Location = new System.Drawing.Point(12, 75);
+            this.txtSource.Location = new System.Drawing.Point(12, 49);
             this.txtSource.Multiline = true;
             this.txtSource.Name = "txtSource";
             this.txtSource.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtSource.Size = new System.Drawing.Size(560, 332);
+            this.txtSource.Size = new System.Drawing.Size(560, 358);
             this.txtSource.TabIndex = 0;
             this.txtSource.WordWrap = false;
             // 
@@ -134,7 +119,6 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(584, 461);
             this.Controls.Add(this.lblGeneral);
-            this.Controls.Add(this.chkEditing);
             this.Controls.Add(this.txtSource);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnCancel);
@@ -157,7 +141,6 @@ namespace Plexdata.ModelGenerator.Gui.Dialogs
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnApply;
         private Plexdata.ModelGenerator.Gui.Controls.TextBoxEx txtSource;
-        private System.Windows.Forms.CheckBox chkEditing;
         private System.Windows.Forms.ToolTip ttsMain;
         private System.Windows.Forms.Label lblGeneral;
     }

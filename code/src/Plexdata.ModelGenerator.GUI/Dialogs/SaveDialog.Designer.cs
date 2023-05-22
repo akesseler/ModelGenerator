@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-namespace Plexdata.ModelGenerator.GUI.Dialogs
+namespace Plexdata.ModelGenerator.Gui.Dialogs
 {
     partial class SaveDialog
     {

@@ -25,7 +25,6 @@
 using Plexdata.ModelGenerator.Defines;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Plexdata.ModelGenerator.Models
 {
@@ -90,21 +89,7 @@ namespace Plexdata.ModelGenerator.Models
 
         protected override void AddImports(Class source, IList<String> lines, GeneratorSettings settings)
         {
-            List<String> items = source.Namespaces.ToList();
-
-            if (settings.SourceType == SourceType.Json && source.Properties.Any(x => x.IsOrigin))
-            {
-                items.AddRange(settings.PackageNamespaces);
-            }
-
-            if (settings.SourceType == SourceType.Xml)
-            {
-                items.AddRange(settings.PackageNamespaces);
-            }
-
-            items.Sort();
-
-            foreach (String item in items)
+            foreach (String item in source.CollectNamespaces(settings.PackageNamespaces))
             {
                 lines.Add($"using {item};");
             }
@@ -127,11 +112,11 @@ namespace Plexdata.ModelGenerator.Models
                 lines.Add($"{indent}[{attribute}]");
             }
 
-            lines.Add($"{indent}public class {source.Name}");
+            lines.Add($"{indent}public class {source.ObjectName}");
             lines.Add($"{indent}{{");
         }
 
-        protected override void AddProperties(Class source, IList<String> lines, GeneratorSettings settings)
+        protected override void AddMembers(Class source, IList<String> lines, GeneratorSettings settings)
         {
             String indent = base.GetIndent(2);
 
@@ -150,19 +135,19 @@ namespace Plexdata.ModelGenerator.Models
                 format = $"{indent}public {{0}} {{1}};";
             }
 
-            foreach (Property property in source.Properties)
+            foreach (Member member in source.Members)
             {
-                if (property.IsComment)
+                if (member.IsComment)
                 {
-                    lines.Add($"{indent}// {property.Comment}");
+                    lines.Add($"{indent}// {member.Comment}");
                 }
 
-                if (base.TryGetAttribute(settings, property, out String attribute))
+                if (base.TryGetAttribute(settings, member, out String attribute))
                 {
                     lines.Add($"{indent}[{attribute}]");
                 }
 
-                lines.Add(String.Format(format, base.GetTypeDescriptor(property), base.GetPropertyName(source, property)));
+                lines.Add(String.Format(format, base.GetTypeDescriptor(member), base.GetMemberName(source, member)));
 
                 lines.Add(String.Empty);
             }

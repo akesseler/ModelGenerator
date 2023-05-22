@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Plexdata Model Generator Help</title>
+    <style>
+        body {
+            margin: 2em;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 1.3em;
+        }
+
+        h1 {
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            font-weight: normal;
+            font-variant: small-caps;
+        }
+
+        h3 {
+            font-size: 1.0em;
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        dt {
+            margin-top: 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Overview</h1>
+    <p>
+        The <em>Plexdata Model Generator</em> allows to convert an XML or a JSON string into
+        so&ndash;called models. Model means in this context a container to manage data. With
+        such containers, an automated serialization and deserialization becomes possible. In
+        addition, code generation can take place for both <em>C#</em> and <em>Visual Basic</em>.
+    </p>
+    <h1>Naming Rules</h1>
+    <p>
+        There are some rules how classes and their members are named. These naming rules will
+        be briefly discussed here.
+    </p>
+    <p>
+        All designations are based on the named entries in the XML or JSON sources. These original
+        designations are then reused in the generated code for the corresponding attributes. In
+        addition, these original designations are used for generating class and member names.
+        However, class and member names follow different rules that must be considered accordingly.
+    </p>
+    <p>
+        Also note, an original designations may start with a digit. However, both class names and
+        member names must never start with digits. Therefore, the character &lsquo;N&rsquo; is
+        prepended in such a case.
+    </p>
+    <h2 id="required-settings">Required Settings</h2>
+    <p>
+        Some settings are required to allow the <em>Naming Rules</em> to be applied. First of all
+        the setting <em>Enable usage of adjustment feature.</em> must be enabled. Secondly, the value
+        of <em>Casing Format:</em> must be different from <code>Unmodified</code>. See figure below
+        what is meant in detail.
+    </p>
+    <img style="display:block; margin:auto;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARIAAAB7
+         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" />
+    <h2>Naming of Classes</h2>
+    <p>
+        As first, all non&ndash;letter and non&ndash;digit characters are removed from the original
+        name. Then the intermediate result is split at all uppercase letters. Thereafter, each first
+        characters is converted to upper case and all remaining characters are converted to lower case.
+        But please keep in mind, this conversion step also depends on current settings. Finally, all
+        name parts are reassembled.
+    </p>
+    <h3>Examples</h3>
+    <dl>
+        <dt><code>SIsUsedForPORT443OnHTTP</code></dt>
+        <dd>
+            This source identifier will be converted into class name <code>SIsUsedForPort443OnHttp</code>.
+        </dd>
+        <dt><code>_S-Is-Used_For_PORT-443-On_HTTP</code></dt>
+        <dd>
+            This source identifier will be converted into class name <code>SIsUsedForPort443OnHttp</code>.
+        </dd>
+        <dt><code>_443IsThePortForSOnHTTP</code></dt>
+        <dd>
+            This source identifier will be converted into class name <code>N443IsThePortForSOnHttp</code>.
+        </dd>
+        <dt><code>The-Same-Source-Name</code> and <code>The_Same_Source_Name</code></dt>
+        <dd>
+            These both source identifiers will be converted into class name <code>TheSameSourceName</code>.
+            These different source identifiers may cause trouble if their members are not the same.
+            Therefore, such constellations should be prevented.
+        </dd>
+    </dl>
+    <p>
+        Finally note the special treatment of the very common naming part &lsquo;IDs&rsquo;. This exact
+        combination of characters is always converted to <code>Ids</code>.
+    </p>
+    <h2>Naming of Members</h2>
+    <p>
+        Basically, the same rules apply to the naming of members (properties or fields) as to the naming
+        of classes. However, additional modifications will take place and these additional modifications
+        as well as other restrictions will be part of this section. See list below for more details.
+    </p>
+    <ul>
+        <li>
+            The adjustment feature must be enabled at all. See section <a href="#required-settings">Required Settings</a>
+            for more details.
+        </li>
+        <li>
+            The suffix <code>Value</code> is appended if the class name equals one of its child member names.
+            But this can only be the case if no prefix or no suffix is configured.
+        </li>
+        <li>
+            Duplicate member names are extended by a continuous index. As described above this may sometimes
+            happen in case of the original designations result in the same member name.
+        </li>
+        <li>
+            The plural version of the last naming part is chosen if a member could be identified as an array
+            type.
+        </li>
+        <li>
+            The casing format (<code>PascalCase</code> or <code>camelCase</code>) is applied, before a prefix
+            is prepended.
+        </li>
+        <li>
+            Both the prefix and the suffix is taken as they are. This in turn means that each whitespace, each
+            special character, etc. will be part of the resulting member name.
+        </li>
+    </ul>
+</body>
+</html>

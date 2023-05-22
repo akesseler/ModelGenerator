@@ -55,6 +55,12 @@ namespace Plexdata.ModelGenerator.Parsers
 
         #endregion
 
+        // TODO: For XML the "Array Issue" might be fixed in a later version.
+        // With "Array Issue" is meant that currently each array type is put in a separate class
+        // which contains just one single member of type List<...>. For XML this could/should be
+        // fixed by removing this single child and using the attributes [XmlArray("ParentTypeName")]
+        // and [XmlArrayItem("ChildTypeName")] instead.
+
         #region Public Methods
 
         public virtual Entity Parse(String source)
@@ -69,22 +75,17 @@ namespace Plexdata.ModelGenerator.Parsers
                 throw new InvalidOperationException("Unable to deserialize source string.");
             }
 
-            Entity result;
-
             if (input.Type == JTokenType.Object)
             {
-                result = this.Parse(input as JObject, this.settings.RootClass.ToSingular());
-            }
-            else if (input.Type == JTokenType.Array)
-            {
-                result = this.Parse(input as JArray, this.settings.RootClass.ToPlural());
-            }
-            else
-            {
-                throw new NotSupportedException($"Type of {input.Type} is not supported as top level instance.");
+                return this.Parse(input as JObject, this.settings.RootClass);
             }
 
-            return result;
+            if (input.Type == JTokenType.Array)
+            {
+                return this.Parse(input as JArray, this.settings.RootClass);
+            }
+
+            throw new NotSupportedException($"Type of {input.Type} is not supported as top level instance.");
         }
 
         #endregion
@@ -93,13 +94,11 @@ namespace Plexdata.ModelGenerator.Parsers
 
         private Entity Parse(JObject source, String name)
         {
-            Entity result = new Entity(name);
+            Entity result = Entity.Create(this.settings.Adjustment, name);
 
             foreach (JToken token in source.PropertyValues())
             {
-                Entity child = this.Parse(token);
-
-                result.AddEntity(child);
+                result.AddChildEntity(this.Parse(token));
             }
 
             return result;
@@ -107,19 +106,17 @@ namespace Plexdata.ModelGenerator.Parsers
 
         private Entity Parse(JArray source, String name)
         {
-            Entity result = new Entity(name, typeof(Array));
-
-            name = name.ToSingular();
+            Entity result = Entity.Create(this.settings.Adjustment, name, typeof(Array));
 
             foreach (JToken token in source.Children())
             {
                 if (token.Type == JTokenType.Object)
                 {
-                    result.AddEntity(this.Parse(token.Value<JObject>(), name));
+                    result.AddChildEntity(this.Parse(token.Value<JObject>(), name));
                 }
                 else
                 {
-                    result.AddEntity(this.Parse(token));
+                    result.AddChildEntity(this.Parse(token));
                 }
             }
 
@@ -160,21 +157,23 @@ namespace Plexdata.ModelGenerator.Parsers
                 name = property.Name;
             }
 
-            Entity entity = new Entity(name);
+            Entity entity = Entity.Create(this.settings.Adjustment, name);
 
             // Can't be put into derived class.
             if (this.IsXmlCDataSection(source))
             {
-                entity.Comment =
+                entity.ReviseComment(
                     "TODO: See also https://learn.microsoft.com/en-us/dotnet/api/system.xml.xmlcdatasection " +
-                    "and see https://learn.microsoft.com/de-de/dotnet/api/system.xml.xmldocument.createcdatasection";
-                entity.Type = typeof(XmlCDataSection);
+                    "and see https://learn.microsoft.com/de-de/dotnet/api/system.xml.xmldocument.createcdatasection");
+
+                entity.ReviseMemberType(typeof(XmlCDataSection));
+
                 return entity;
             }
 
             foreach (JToken token in source.Children())
             {
-                entity.AddEntity(this.Parse(token));
+                entity.AddChildEntity(this.Parse(token));
             }
 
             return entity;
@@ -188,8 +187,6 @@ namespace Plexdata.ModelGenerator.Parsers
             {
                 name = property.Name;
             }
-
-            name = name.ToPlural();
 
             return this.Parse(source, name);
         }
@@ -221,9 +218,9 @@ namespace Plexdata.ModelGenerator.Parsers
             switch (source.Type)
             {
                 case JTokenType.Null:
-                    return new Entity(name, typeof(Object), "TODO: Review object type.");
+                    return Entity.Create(this.settings.Adjustment, name, typeof(Object), "TODO: Review object type.");
                 default:
-                    return new Entity(name, source.GetValueType());
+                    return Entity.Create(this.settings.Adjustment, name, source.GetValueType());
             }
         }
 
